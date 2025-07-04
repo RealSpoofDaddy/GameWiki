@@ -9,6 +9,7 @@
     <meta property="og:description" content="Comprehensive video game information and history">
     <meta property="og:type" content="website">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/game-page.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Linux+Libertine:wght@400;700&family=Liberation+Sans:wght@400;700&display=swap" rel="stylesheet">
@@ -34,7 +35,7 @@
         </div>
     </header>
 
-    <main class="main-content">
+    <main id="mainContent" class="main-content">
         <div class="container">
             <div class="content-wrapper">
                 <div class="primary-content">
@@ -164,6 +165,15 @@
         </div>
     </main>
 
+    <!-- Dynamic Game Page Container -->
+    <div id="gamePageContainer">
+        <div class="container">
+            <div id="gamePageContent">
+                <!-- Game page content will be dynamically loaded here -->
+            </div>
+        </div>
+    </div>
+
     <footer class="site-footer">
         <div class="container">
             <p>&copy; 2024 GamePedia. A free gaming encyclopedia.</p>
@@ -176,5 +186,6 @@
     </footer>
 
     <script src="script.js"></script>
+    <script src="js/router.js"></script>
 </body>
 </html>

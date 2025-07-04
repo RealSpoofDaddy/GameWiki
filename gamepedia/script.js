@@ -383,8 +383,13 @@ function selectGame(gameId) {
 
 // Open game page
 function openGamePage(game) {
-    // For now, just show an alert. In a real implementation, this would navigate to a game page
-    alert(`Opening game page for: ${game.title}\n\nThis would navigate to games/${game.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.html`);
+    // Use the router to navigate to the game page
+    if (window.gameRouter) {
+        gameRouter.navigateToGame(game.id);
+    } else {
+        // Fallback if router isn't loaded yet
+        window.location.hash = `game/${game.title.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '-')}`;
+    }
 }
 
 // Display featured game
@@ -598,3 +603,5 @@ window.showNewGames = showNewGames;
 window.showClassicGames = showClassicGames;
 window.showIndieGames = showIndieGames;
 window.showMultiplayerGames = showMultiplayerGames;
+window.addToRecentlyViewed = addToRecentlyViewed;
+window.applyFilters = applyFilters;
