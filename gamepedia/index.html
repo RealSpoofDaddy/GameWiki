@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GamePedia - The Free Gaming Encyclopedia</title>
+    <meta name="description" content="A comprehensive encyclopedia of video games, featuring detailed information about games, developers, platforms, and gaming history.">
+    <meta property="og:title" content="GamePedia - The Free Gaming Encyclopedia">
+    <meta property="og:description" content="Comprehensive video game information and history">
+    <meta property="og:type" content="website">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Linux+Libertine:wght@400;700&family=Liberation+Sans:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="site-title">
+                    <a href="index.html">GamePedia</a>
+                </h1>
+                <p class="site-tagline">The Free Gaming Encyclopedia</p>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#browse" onclick="showBrowseSection()">Browse</a></li>
+                    <li><a href="#categories" onclick="showCategoriesSection()">Categories</a></li>
+                    <li><a href="#" onclick="randomGame()">Random Game</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="content-wrapper">
+                <div class="primary-content">
+                    <!-- Search Section -->
+                    <section class="search-section">
+                        <div class="search-container">
+                            <h2 class="search-title">Search GamePedia</h2>
+                            <div class="search-box">
+                                <input type="text" id="searchInput" placeholder="Search for games, developers, platforms..." autocomplete="off">
+                                <button type="button" id="searchBtn">Search</button>
+                            </div>
+                            <div id="searchSuggestions" class="search-suggestions"></div>
+                            <div class="search-filters">
+                                <select id="genreFilter">
+                                    <option value="">All Genres</option>
+                                    <option value="action">Action</option>
+                                    <option value="adventure">Adventure</option>
+                                    <option value="rpg">RPG</option>
+                                    <option value="strategy">Strategy</option>
+                                    <option value="simulation">Simulation</option>
+                                    <option value="sports">Sports</option>
+                                    <option value="puzzle">Puzzle</option>
+                                </select>
+                                <select id="platformFilter">
+                                    <option value="">All Platforms</option>
+                                    <option value="pc">PC</option>
+                                    <option value="playstation">PlayStation</option>
+                                    <option value="xbox">Xbox</option>
+                                    <option value="nintendo">Nintendo</option>
+                                    <option value="mobile">Mobile</option>
+                                </select>
+                                <select id="yearFilter">
+                                    <option value="">All Years</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2023">2023</option>
+                                    <option value="2022">2022</option>
+                                    <option value="2021">2021</option>
+                                    <option value="2020">2020</option>
+                                </select>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Featured Game Section -->
+                    <section class="featured-section">
+                        <h2>Featured Game of the Day</h2>
+                        <div id="featuredGame" class="featured-game">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                    </section>
+
+                    <!-- Browse Categories -->
+                    <section class="browse-section">
+                        <h2>Browse by Category</h2>
+                        <div class="category-grid">
+                            <div class="category-card" onclick="filterByCategory('platform')">
+                                <h3>By Platform</h3>
+                                <p>Explore games by gaming platform</p>
+                            </div>
+                            <div class="category-card" onclick="filterByCategory('genre')">
+                                <h3>By Genre</h3>
+                                <p>Browse games by their genre</p>
+                            </div>
+                            <div class="category-card" onclick="filterByCategory('year')">
+                                <h3>By Release Year</h3>
+                                <p>Discover games from different eras</p>
+                            </div>
+                            <div class="category-card" onclick="filterByCategory('developer')">
+                                <h3>By Developer</h3>
+                                <p>Find games by development studio</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Recent Additions -->
+                    <section class="recent-section">
+                        <h2>Recent Additions</h2>
+                        <div id="recentGames" class="recent-games">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                    </section>
+
+                    <!-- Search Results -->
+                    <section id="searchResults" class="search-results" style="display: none;">
+                        <h2>Search Results</h2>
+                        <div id="resultsList" class="results-list"></div>
+                    </section>
+                </div>
+
+                <aside class="sidebar">
+                    <div class="sidebar-section">
+                        <h3>GamePedia Statistics</h3>
+                        <div class="stats">
+                            <div class="stat-item">
+                                <span class="stat-number" id="totalGames">0</span>
+                                <span class="stat-label">Total Games</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" id="totalDevelopers">0</span>
+                                <span class="stat-label">Developers</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" id="totalPlatforms">0</span>
+                                <span class="stat-label">Platforms</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <h3>Quick Navigation</h3>
+                        <ul class="quick-nav">
+                            <li><a href="#" onclick="showNewGames()">New Releases</a></li>
+                            <li><a href="#" onclick="showClassicGames()">Classic Games</a></li>
+                            <li><a href="#" onclick="showIndieGames()">Indie Games</a></li>
+                            <li><a href="#" onclick="showMultiplayerGames()">Multiplayer Games</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <h3>Recently Viewed</h3>
+                        <div id="recentlyViewed" class="recently-viewed">
+                            <p class="no-recent">No recently viewed games</p>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2024 GamePedia. A free gaming encyclopedia.</p>
+            <nav class="footer-nav">
+                <a href="#about">About</a>
+                <a href="#privacy">Privacy</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
