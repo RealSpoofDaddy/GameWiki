@@ -1,18 +1,533 @@
+// ========================================
+// GAMEPEDIA - ULTIMATE GAMING HUB
+// Enhanced JavaScript with Modern Features
+// ========================================
+
 // Global variables
 let gamesDatabase = [];
 let currentSearchResults = [];
 let recentlyViewedGames = JSON.parse(localStorage.getItem('recentlyViewed') || '[]');
+let steamWidget = null;
+let animationFrameId = null;
 
-// Initialize the application
+// Gaming Hub Configuration
+const GAMEPEDIA_CONFIG = {
+    animations: {
+        enabled: !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+        duration: 300,
+        easing: 'ease-out'
+    },
+    steam: {
+        apiEndpoint: '/api/steam',
+        updateInterval: 30000, // 30 seconds
+        retryDelay: 5000
+    },
+    ui: {
+        lazyLoadThreshold: 100,
+        searchDebounceDelay: 300,
+        tooltipDelay: 500
+    }
+};
+
+// Initialize the application with enhanced features
 document.addEventListener('DOMContentLoaded', function() {
-    loadGamesDatabase();
-    initializeEventListeners();
-    displayFeaturedGame();
-    displayRecentGames();
-    updateStatistics();
-    displayRecentlyViewed();
-    initializeSteamWidget();
+    initializeGamingHub();
 });
+
+// Enhanced initialization
+async function initializeGamingHub() {
+    try {
+        // Show loading state
+        showGlobalLoading();
+        
+        // Initialize core systems
+        await Promise.all([
+            loadGamesDatabase(),
+            initializeAnimationSystem(),
+            initializeEnhancedSteamWidget(),
+            initializeEventListeners()
+        ]);
+        
+        // Initialize UI components
+        await Promise.all([
+            displayFeaturedGame(),
+            displayRecentGames(),
+            updateStatistics(),
+            displayRecentlyViewed()
+        ]);
+        
+        // Initialize advanced features
+        initializeLazyLoading();
+        initializeTooltips();
+        initializeKeyboardShortcuts();
+        initializeParticleSystem();
+        
+        // Hide loading state
+        hideGlobalLoading();
+        
+        // Show welcome animation
+        playWelcomeAnimation();
+        
+    } catch (error) {
+        console.error('Failed to initialize Gaming Hub:', error);
+        showErrorMessage('Failed to initialize Gaming Hub. Please refresh the page.');
+    }
+}
+
+// Global loading state management
+function showGlobalLoading() {
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.id = 'global-loading';
+    loadingOverlay.innerHTML = `
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h3>Loading Gaming Hub...</h3>
+            <div class="loading-progress">
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+    `;
+    
+    loadingOverlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d30 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        backdrop-filter: blur(10px);
+    `;
+    
+    document.body.appendChild(loadingOverlay);
+    
+    // Animate progress bar
+    const progressBar = loadingOverlay.querySelector('.progress-bar');
+    let progress = 0;
+    const progressInterval = setInterval(() => {
+        progress += Math.random() * 15;
+        if (progress > 90) progress = 90;
+        progressBar.style.width = progress + '%';
+        
+        if (progress >= 90) {
+            clearInterval(progressInterval);
+        }
+    }, 200);
+}
+
+function hideGlobalLoading() {
+    const loadingOverlay = document.getElementById('global-loading');
+    if (loadingOverlay) {
+        const progressBar = loadingOverlay.querySelector('.progress-bar');
+        progressBar.style.width = '100%';
+        
+        setTimeout(() => {
+            loadingOverlay.style.opacity = '0';
+            setTimeout(() => {
+                loadingOverlay.remove();
+            }, 300);
+        }, 500);
+    }
+}
+
+// Enhanced animation system
+function initializeAnimationSystem() {
+    if (!GAMEPEDIA_CONFIG.animations.enabled) return;
+    
+    // Initialize Intersection Observer for scroll animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const element = entry.target;
+                const animationType = element.dataset.animation || 'fadeInUp';
+                
+                requestAnimationFrame(() => {
+                    element.style.animation = `${animationType} ${GAMEPEDIA_CONFIG.animations.duration}ms ${GAMEPEDIA_CONFIG.animations.easing}`;
+                    element.classList.add('animated');
+                });
+                
+                observer.unobserve(element);
+            }
+        });
+    }, observerOptions);
+    
+    // Observe all animated elements
+    document.querySelectorAll('.game-card, .category-card, .result-item, .stat-item').forEach(el => {
+        observer.observe(el);
+    });
+    
+    return Promise.resolve();
+}
+
+// Particle system for enhanced visual effects
+function initializeParticleSystem() {
+    if (!GAMEPEDIA_CONFIG.animations.enabled) return;
+    
+    const canvas = document.createElement('canvas');
+    canvas.id = 'particle-canvas';
+    canvas.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: -1;
+        opacity: 0.3;
+    `;
+    
+    document.body.appendChild(canvas);
+    
+    const ctx = canvas.getContext('2d');
+    const particles = [];
+    const particleCount = 50;
+    
+    // Resize canvas
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    
+    // Create particles
+    for (let i = 0; i < particleCount; i++) {
+        particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.5,
+            vy: (Math.random() - 0.5) * 0.5,
+            radius: Math.random() * 2 + 1,
+            color: ['#00ff7f', '#1e90ff', '#ff1493'][Math.floor(Math.random() * 3)],
+            opacity: Math.random() * 0.5 + 0.2
+        });
+    }
+    
+    // Animate particles
+    function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        particles.forEach(particle => {
+            // Update position
+            particle.x += particle.vx;
+            particle.y += particle.vy;
+            
+            // Bounce off edges
+            if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+            if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+            
+            // Draw particle
+            ctx.beginPath();
+            ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+            ctx.fillStyle = particle.color + Math.floor(particle.opacity * 255).toString(16).padStart(2, '0');
+            ctx.fill();
+            
+            // Add glow effect
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = particle.color;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        });
+        
+        requestAnimationFrame(animateParticles);
+    }
+    
+    animateParticles();
+}
+
+// Welcome animation
+function playWelcomeAnimation() {
+    if (!GAMEPEDIA_CONFIG.animations.enabled) return;
+    
+    const title = document.querySelector('.site-title');
+    const tagline = document.querySelector('.site-tagline');
+    
+    if (title) {
+        title.style.animation = 'fadeInDown 0.8s ease-out';
+    }
+    
+    if (tagline) {
+        tagline.style.animation = 'fadeInUp 0.8s ease-out 0.3s both';
+    }
+    
+    // Animate navigation items
+    const navItems = document.querySelectorAll('.main-nav a');
+    navItems.forEach((item, index) => {
+        item.style.animation = `fadeInUp 0.5s ease-out ${0.1 * index + 0.5}s both`;
+    });
+}
+
+// Enhanced error handling with gaming-style notifications
+function showErrorMessage(message, type = 'error') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <div class="notification-content">
+            <div class="notification-icon">
+                ${type === 'error' ? '⚠️' : type === 'success' ? '✅' : 'ℹ️'}
+            </div>
+            <div class="notification-text">${message}</div>
+            <button class="notification-close">×</button>
+        </div>
+    `;
+    
+    // Add styles
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--secondary-bg);
+        border: 2px solid var(--accent-${type === 'error' ? 'pink' : type === 'success' ? 'green' : 'blue'});
+        border-radius: 12px;
+        padding: 15px;
+        z-index: 9999;
+        backdrop-filter: blur(10px);
+        box-shadow: var(--shadow-lg);
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Animate in
+    requestAnimationFrame(() => {
+        notification.style.transform = 'translateX(0)';
+    });
+    
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+        hideNotification(notification);
+    }, 5000);
+    
+    // Handle close button
+    notification.querySelector('.notification-close').addEventListener('click', () => {
+        hideNotification(notification);
+    });
+}
+
+function hideNotification(notification) {
+    notification.style.transform = 'translateX(100%)';
+    setTimeout(() => {
+        notification.remove();
+    }, 300);
+}
+
+// Enhanced keyboard shortcuts
+function initializeKeyboardShortcuts() {
+    document.addEventListener('keydown', (e) => {
+        // Ctrl/Cmd + / to focus search
+        if ((e.ctrlKey || e.metaKey) && e.key === '/') {
+            e.preventDefault();
+            document.getElementById('searchInput').focus();
+        }
+        
+        // Escape to clear search/close modals
+        if (e.key === 'Escape') {
+            hideSearchSuggestions();
+            hideSearchResults();
+            closeAllModals();
+        }
+        
+        // Ctrl/Cmd + K for command palette (future feature)
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            e.preventDefault();
+            // Future: Open command palette
+        }
+    });
+}
+
+// Enhanced tooltip system
+function initializeTooltips() {
+    const tooltips = document.querySelectorAll('[data-tooltip]');
+    
+    tooltips.forEach(element => {
+        let tooltip = null;
+        let timeout = null;
+        
+        element.addEventListener('mouseenter', () => {
+            timeout = setTimeout(() => {
+                showTooltip(element);
+            }, GAMEPEDIA_CONFIG.ui.tooltipDelay);
+        });
+        
+        element.addEventListener('mouseleave', () => {
+            clearTimeout(timeout);
+            hideTooltip(element);
+        });
+    });
+}
+
+function showTooltip(element) {
+    const tooltipText = element.getAttribute('data-tooltip');
+    const tooltip = document.createElement('div');
+    tooltip.className = 'tooltip';
+    tooltip.textContent = tooltipText;
+    
+    tooltip.style.cssText = `
+        position: absolute;
+        background: var(--secondary-bg);
+        color: var(--text-primary);
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        white-space: nowrap;
+        z-index: 1000;
+        pointer-events: none;
+        border: 1px solid var(--accent-blue);
+        box-shadow: var(--shadow-md);
+    `;
+    
+    document.body.appendChild(tooltip);
+    
+    // Position tooltip
+    const rect = element.getBoundingClientRect();
+    tooltip.style.left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
+    tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + 'px';
+    
+    // Animate in
+    tooltip.style.opacity = '0';
+    tooltip.style.transform = 'translateY(10px)';
+    
+    requestAnimationFrame(() => {
+        tooltip.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+        tooltip.style.opacity = '1';
+        tooltip.style.transform = 'translateY(0)';
+    });
+    
+    element._tooltip = tooltip;
+}
+
+function hideTooltip(element) {
+    if (element._tooltip) {
+        element._tooltip.style.opacity = '0';
+        element._tooltip.style.transform = 'translateY(10px)';
+        
+        setTimeout(() => {
+            if (element._tooltip) {
+                element._tooltip.remove();
+                element._tooltip = null;
+            }
+        }, 200);
+    }
+}
+
+// Enhanced lazy loading
+function initializeLazyLoading() {
+    const images = document.querySelectorAll('img[data-src]');
+    const imageObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                img.src = img.dataset.src;
+                img.classList.add('loaded');
+                imageObserver.unobserve(img);
+            }
+        });
+    }, {
+        rootMargin: `${GAMEPEDIA_CONFIG.ui.lazyLoadThreshold}px`
+    });
+    
+    images.forEach(img => imageObserver.observe(img));
+}
+
+// Modal system
+function closeAllModals() {
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.style.opacity = '0';
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
+    });
+}
+
+// Initialize Enhanced Steam Widget
+function initializeEnhancedSteamWidget() {
+    steamWidget = new SteamWidget();
+    
+    // Add modern gaming enhancements
+    if (steamWidget && GAMEPEDIA_CONFIG.animations.enabled) {
+        // Animate Steam widget entrance
+        setTimeout(() => {
+            const widgetElement = document.querySelector('.steam-widget');
+            if (widgetElement) {
+                widgetElement.style.animation = 'fadeInRight 0.8s ease-out both';
+            }
+        }, 500);
+        
+        // Add interactive hover effects
+        setTimeout(() => {
+            addSteamWidgetEnhancements();
+        }, 1000);
+    }
+    
+    return Promise.resolve();
+}
+
+// Add interactive enhancements to Steam widget
+function addSteamWidgetEnhancements() {
+    const steamWidget = document.querySelector('.steam-widget');
+    if (!steamWidget) return;
+    
+    // Add click-to-expand functionality
+    steamWidget.addEventListener('click', (e) => {
+        if (e.target.closest('.steam-connect-btn') || e.target.closest('.steam-config')) {
+            return; // Don't expand if clicking interactive elements
+        }
+        
+        steamWidget.classList.toggle('expanded');
+        
+        if (steamWidget.classList.contains('expanded')) {
+            steamWidget.style.maxHeight = 'none';
+            steamWidget.style.transform = 'scale(1.02)';
+        } else {
+            steamWidget.style.maxHeight = '';
+            steamWidget.style.transform = '';
+        }
+    });
+    
+    // Add game card hover effects
+    const gameCards = steamWidget.querySelectorAll('.steam-recent-game');
+    gameCards.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            if (GAMEPEDIA_CONFIG.animations.enabled) {
+                card.style.transform = 'translateY(-3px) scale(1.02)';
+            }
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+        });
+    });
+    
+    // Add stat item animations
+    const statItems = steamWidget.querySelectorAll('.steam-stat-item');
+    statItems.forEach((item, index) => {
+        if (GAMEPEDIA_CONFIG.animations.enabled) {
+            item.style.animationDelay = `${index * 0.1}s`;
+            item.classList.add('animate-stat');
+        }
+    });
+    
+    // Add achievement progress animation
+    const achievementBars = steamWidget.querySelectorAll('.steam-achievement-fill');
+    achievementBars.forEach(bar => {
+        const targetWidth = bar.style.width || bar.getAttribute('data-width') || '0%';
+        bar.style.width = '0%';
+        
+        setTimeout(() => {
+            bar.style.width = targetWidth;
+        }, 1000);
+    });
+}
 
 // Load games database
 async function loadGamesDatabase() {
@@ -613,6 +1128,22 @@ class SteamWidget {
         this.baseUrl = window.location.origin;
         this.isDemo = false;
         this.sessionToken = localStorage.getItem('steam_session_token') || null;
+        this.updateInterval = 30000; // 30 seconds
+        this.retryDelay = 5000;
+        this.maxRetries = 3;
+        this.currentRetries = 0;
+        this.isUpdating = false;
+        this.lastUpdateTime = 0;
+        
+        // Modern gaming features
+        this.features = {
+            liveActivity: true,
+            gameRecommendations: true,
+            priceTracking: true,
+            achievementTracking: true,
+            socialFeatures: true,
+            performanceStats: true
+        };
         this.demoData = {
             // Enhanced demo data with comprehensive features
             player: {

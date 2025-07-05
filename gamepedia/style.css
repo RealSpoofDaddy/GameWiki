@@ -1,3 +1,8 @@
+/* ========================================
+   GAMEPEDIA - ULTIMATE GAMING HUB
+   Modern Gaming UI with Dark Theme & Neon Accents
+   ========================================*/
+
 /* Reset and Base Styles */
 * {
     margin: 0;
@@ -5,1027 +10,892 @@
     box-sizing: border-box;
 }
 
-/* Typography - Wikipedia-inspired */
+:root {
+    /* Gaming Color Palette */
+    --primary-bg: #1a1a1a;
+    --secondary-bg: #2d2d30;
+    --accent-green: #00ff7f;
+    --accent-pink: #ff1493;
+    --accent-blue: #1e90ff;
+    --text-primary: #ffffff;
+    --text-secondary: #b3b3b3;
+    --text-muted: #8a8a8a;
+    --border-color: #404040;
+    --success-color: #00ff7f;
+    --warning-color: #ffaa00;
+    --error-color: #ff4444;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #1a1a1a 0%, #2d2d30 100%);
+    --gradient-accent: linear-gradient(135deg, #00ff7f 0%, #1e90ff 100%);
+    --gradient-neon: linear-gradient(90deg, #00ff7f, #1e90ff, #ff1493, #00ff7f);
+    --gradient-glass: rgba(45, 45, 48, 0.6);
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+    --shadow-neon: 0 0 20px rgba(30, 144, 255, 0.4);
+    
+    /* Animations */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+/* Typography - Gaming Inspired */
 body {
-    font-family: 'Linux Libertine', Georgia, 'Times New Roman', Times, serif;
+    font-family: 'Segoe UI', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 16px;
     line-height: 1.6;
-    color: #222;
-    background-color: #fff;
+    color: var(--text-primary);
+    background: var(--primary-bg);
+    background-image: 
+        radial-gradient(circle at 20% 20%, rgba(30, 144, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 20, 147, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 60%, rgba(0, 255, 127, 0.1) 0%, transparent 50%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Animated background particles */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(2px 2px at 40% 60%, rgba(0, 255, 127, 0.3), transparent),
+        radial-gradient(1px 1px at 80% 20%, rgba(30, 144, 255, 0.3), transparent),
+        radial-gradient(3px 3px at 20% 80%, rgba(255, 20, 147, 0.3), transparent);
+    animation: particles 20s linear infinite;
+    z-index: -1;
+    pointer-events: none;
+}
+
+@keyframes particles {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(-100vh) rotate(360deg); }
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Liberation Sans', Arial, Helvetica, sans-serif;
-    font-weight: 400;
-    margin-bottom: 0.5em;
-    border-bottom: 1px solid #a2a9b1;
-    padding-bottom: 0.25em;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 h1 {
-    font-size: 2.5em;
+    font-size: 3rem;
     font-weight: 700;
-    border-bottom: 3px solid #a2a9b1;
+    background: var(--gradient-accent);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes textGlow {
+    0% { filter: drop-shadow(0 0 10px rgba(30, 144, 255, 0.5)); }
+    100% { filter: drop-shadow(0 0 20px rgba(0, 255, 127, 0.8)); }
 }
 
 h2 {
-    font-size: 2em;
-    margin-top: 1.5em;
+    font-size: 2.5rem;
+    color: var(--accent-blue);
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: var(--gradient-accent);
+    border-radius: 2px;
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    0% { width: 0; }
+    100% { width: 60px; }
 }
 
 h3 {
-    font-size: 1.5em;
-    margin-top: 1.2em;
+    font-size: 1.8rem;
+    color: var(--accent-green);
 }
 
-/* Links */
+/* Enhanced Links */
 a {
-    color: #0645ad;
+    color: var(--accent-blue);
     text-decoration: none;
+    position: relative;
+    transition: all var(--transition-normal);
 }
 
-a:visited {
-    color: #0b0080;
+a::before {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--gradient-accent);
+    transition: width var(--transition-normal);
+}
+
+a:hover::before {
+    width: 100%;
 }
 
 a:hover {
-    text-decoration: underline;
-}
-
-a:active {
-    color: #faa700;
+    color: var(--accent-green);
+    text-shadow: 0 0 10px rgba(0, 255, 127, 0.5);
 }
 
 /* Container and Layout */
 .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 0 20px;
 }
 
 .content-wrapper {
     display: grid;
-    grid-template-columns: 1fr 250px;
-    gap: 30px;
-    margin-top: 20px;
+    grid-template-columns: 1fr 320px;
+    gap: 40px;
+    margin-top: 30px;
 }
 
-/* Header */
+/* Header - Gaming Hub Style */
 .site-header {
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #a2a9b1;
-    padding: 10px 0;
+    background: var(--secondary-bg);
+    background-image: linear-gradient(135deg, var(--secondary-bg) 0%, rgba(30, 144, 255, 0.1) 100%);
+    border-bottom: 2px solid var(--accent-blue);
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-lg);
 }
 
 .header-content {
     display: flex;
     align-items: center;
-    gap: 20px;
-    margin-bottom: 10px;
+    justify-content: space-between;
+    margin-bottom: 15px;
 }
 
 .site-title {
-    font-size: 2.2em;
+    font-size: 2.8rem;
     font-weight: 700;
-    border: none;
     margin: 0;
-    padding: 0;
+    position: relative;
 }
 
 .site-title a {
-    color: #000;
+    background: var(--gradient-accent);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     text-decoration: none;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+    animation: logoGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes logoGlow {
+    0% { filter: drop-shadow(0 0 10px rgba(30, 144, 255, 0.5)); }
+    100% { filter: drop-shadow(0 0 20px rgba(0, 255, 127, 0.8)); }
 }
 
 .site-tagline {
     font-style: italic;
-    color: #54595d;
-    font-size: 0.9em;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-top: 5px;
 }
 
-/* Navigation */
+/* Navigation - Gaming Style */
 .main-nav ul {
     list-style: none;
     display: flex;
-    gap: 20px;
+    gap: 15px;
     flex-wrap: wrap;
 }
 
 .main-nav a {
     display: block;
-    padding: 8px 12px;
-    background-color: #f8f9fa;
-    border: 1px solid #a2a9b1;
-    border-radius: 3px;
-    color: #0645ad;
-    font-size: 0.9em;
-    transition: all 0.2s ease;
+    padding: 12px 20px;
+    background: var(--gradient-glass);
+    border: 2px solid transparent;
+    border-radius: 25px;
+    color: var(--text-primary);
+    font-weight: 500;
+    transition: all var(--transition-normal);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.main-nav a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-accent);
+    transition: left var(--transition-normal);
+    z-index: -1;
+}
+
+.main-nav a:hover::before {
+    left: 0;
 }
 
 .main-nav a:hover {
-    background-color: #eaecf0;
-    text-decoration: none;
+    color: var(--primary-bg);
+    border-color: var(--accent-blue);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-neon);
 }
 
-/* Search Section */
+/* Search Section - Gaming Enhancement */
 .search-section {
-    background-color: #f8f9fa;
-    border: 1px solid #a2a9b1;
-    border-radius: 5px;
-    padding: 20px;
-    margin-bottom: 30px;
+    background: var(--secondary-bg);
+    background-image: linear-gradient(135deg, var(--secondary-bg) 0%, rgba(0, 255, 127, 0.05) 100%);
+    border: 2px solid var(--accent-green);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    box-shadow: var(--shadow-lg);
+}
+
+.search-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(from 0deg, transparent, rgba(0, 255, 127, 0.1), transparent);
+    animation: rotate 10s linear infinite;
+    z-index: -1;
+}
+
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 .search-title {
-    font-size: 1.8em;
+    font-size: 2.2rem;
     text-align: center;
-    margin-bottom: 20px;
-    border: none;
+    margin-bottom: 25px;
+    color: var(--accent-green);
+    text-shadow: 0 0 20px rgba(0, 255, 127, 0.3);
 }
 
 .search-box {
     display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
 #searchInput {
     flex: 1;
-    padding: 12px;
-    border: 1px solid #a2a9b1;
-    border-radius: 3px;
+    padding: 16px 20px;
+    background: rgba(26, 26, 26, 0.8);
+    border: 2px solid var(--border-color);
+    border-radius: 30px;
     font-size: 16px;
-    font-family: inherit;
+    color: var(--text-primary);
+    transition: all var(--transition-normal);
+    backdrop-filter: blur(10px);
+}
+
+#searchInput:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 20px rgba(30, 144, 255, 0.3);
+    transform: scale(1.02);
+}
+
+#searchInput::placeholder {
+    color: var(--text-muted);
 }
 
 #searchBtn {
-    padding: 12px 20px;
-    background-color: #0645ad;
-    color: white;
+    padding: 16px 30px;
+    background: var(--gradient-accent);
+    color: var(--primary-bg);
     border: none;
-    border-radius: 3px;
+    border-radius: 30px;
     cursor: pointer;
     font-size: 16px;
-    transition: background-color 0.2s ease;
+    font-weight: 600;
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+#searchBtn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left var(--transition-normal);
+}
+
+#searchBtn:hover::before {
+    left: 100%;
 }
 
 #searchBtn:hover {
-    background-color: #0b0080;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-neon);
 }
 
 .search-filters {
     display: flex;
-    gap: 10px;
+    gap: 15px;
     flex-wrap: wrap;
 }
 
 .search-filters select {
-    padding: 8px;
-    border: 1px solid #a2a9b1;
-    border-radius: 3px;
-    background-color: white;
-    font-family: inherit;
-    flex: 1;
-    min-width: 120px;
+    padding: 12px 18px;
+    background: rgba(26, 26, 26, 0.8);
+    border: 2px solid var(--border-color);
+    border-radius: 25px;
+    color: var(--text-primary);
+    font-size: 14px;
+    min-width: 140px;
+    transition: all var(--transition-normal);
+    backdrop-filter: blur(10px);
 }
 
-/* Search Suggestions */
+.search-filters select:focus {
+    outline: none;
+    border-color: var(--accent-green);
+    box-shadow: 0 0 15px rgba(0, 255, 127, 0.3);
+}
+
+/* Search Suggestions - Enhanced */
 .search-suggestions {
-    position: relative;
-    background-color: white;
-    border: 1px solid #a2a9b1;
-    border-top: none;
-    border-radius: 0 0 3px 3px;
-    max-height: 200px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--secondary-bg);
+    border: 2px solid var(--accent-blue);
+    border-radius: 15px;
+    max-height: 300px;
     overflow-y: auto;
-    display: none;
+    z-index: 100;
+    backdrop-filter: blur(20px);
+    box-shadow: var(--shadow-lg);
+    margin-top: 10px;
 }
 
 .suggestion-item {
-    padding: 10px;
+    padding: 15px 20px;
     cursor: pointer;
-    border-bottom: 1px solid #eaecf0;
+    border-bottom: 1px solid var(--border-color);
+    transition: all var(--transition-fast);
 }
 
 .suggestion-item:hover {
-    background-color: #f8f9fa;
+    background: rgba(30, 144, 255, 0.1);
+    transform: translateX(5px);
 }
 
 .suggestion-item:last-child {
     border-bottom: none;
 }
 
-/* Featured Game */
+/* Featured Game - Gaming Enhancement */
 .featured-game {
     display: grid;
-    grid-template-columns: 200px 1fr;
-    gap: 20px;
-    background-color: #f8f9fa;
-    border: 1px solid #a2a9b1;
-    border-radius: 5px;
-    padding: 20px;
-    margin-bottom: 30px;
+    grid-template-columns: 300px 1fr;
+    gap: 30px;
+    background: var(--secondary-bg);
+    background-image: linear-gradient(135deg, var(--secondary-bg) 0%, rgba(255, 20, 147, 0.05) 100%);
+    border: 2px solid var(--accent-pink);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    box-shadow: var(--shadow-lg);
+    transition: all var(--transition-normal);
+}
+
+.featured-game:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 50px rgba(255, 20, 147, 0.3);
+}
+
+.featured-game::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--gradient-neon);
+    background-size: 300% 100%;
+    animation: neonFlow 3s linear infinite;
+}
+
+@keyframes neonFlow {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 300% 50%; }
 }
 
 .featured-game-image {
     width: 100%;
-    height: auto;
-    border-radius: 3px;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 15px;
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-md);
+}
+
+.featured-game:hover .featured-game-image {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(255, 20, 147, 0.5);
 }
 
 .featured-game-info h3 {
-    font-size: 1.4em;
-    margin-bottom: 10px;
-    border: none;
+    font-size: 2rem;
+    margin-bottom: 15px;
+    color: var(--accent-pink);
 }
 
 .featured-game-meta {
-    color: #54595d;
-    font-size: 0.9em;
-    margin-bottom: 15px;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin-bottom: 20px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
 }
 
-/* Category Grid */
+/* Category Grid - Gaming Enhancement */
 .category-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    margin-bottom: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
 }
 
 .category-card {
-    background-color: #f8f9fa;
-    border: 1px solid #a2a9b1;
-    border-radius: 5px;
-    padding: 20px;
+    background: var(--secondary-bg);
+    background-image: linear-gradient(135deg, var(--secondary-bg) 0%, rgba(30, 144, 255, 0.05) 100%);
+    border: 2px solid var(--border-color);
+    border-radius: 20px;
+    padding: 30px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.category-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-accent);
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+    z-index: -1;
+}
+
+.category-card:hover::before {
+    opacity: 0.1;
 }
 
 .category-card:hover {
-    background-color: #eaecf0;
-    border-color: #0645ad;
+    transform: translateY(-8px) scale(1.02);
+    border-color: var(--accent-blue);
+    box-shadow: var(--shadow-neon);
 }
 
 .category-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    color: var(--accent-blue);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.category-card h3::before {
+    content: '🎮';
     font-size: 1.2em;
-    border: none;
-    margin-bottom: 10px;
-    color: #0645ad;
 }
 
 .category-card p {
-    color: #54595d;
-    font-size: 0.9em;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.5;
 }
 
-/* Recent Games */
+/* Game Cards - Enhanced Gaming Style */
 .recent-games {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 15px;
-    margin-bottom: 30px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
 }
 
 .game-card {
-    background-color: #f8f9fa;
-    border: 1px solid #a2a9b1;
-    border-radius: 5px;
-    padding: 15px;
+    background: var(--secondary-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 20px;
+    padding: 20px;
     text-align: center;
-    transition: all 0.2s ease;
+    transition: all var(--transition-normal);
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.game-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-accent);
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+    z-index: -1;
+}
+
+.game-card:hover::before {
+    opacity: 0.1;
 }
 
 .game-card:hover {
-    background-color: #eaecf0;
-    border-color: #0645ad;
+    transform: translateY(-10px);
+    border-color: var(--accent-green);
+    box-shadow: 0 15px 40px rgba(0, 255, 127, 0.3);
 }
 
 .game-card-image {
     width: 100%;
-    height: 120px;
+    height: 180px;
     object-fit: cover;
-    border-radius: 3px;
-    margin-bottom: 10px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    transition: all var(--transition-normal);
+}
+
+.game-card:hover .game-card-image {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0, 255, 127, 0.5);
 }
 
 .game-card h4 {
-    font-size: 1em;
-    border: none;
-    margin-bottom: 5px;
-    color: #0645ad;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    color: var(--accent-green);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .game-card-meta {
-    font-size: 0.8em;
-    color: #54595d;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
 }
 
-/* Sidebar */
+/* Sidebar - Gaming Enhancement */
 .sidebar {
-    background-color: #f8f9fa;
-    border: 1px solid #a2a9b1;
-    border-radius: 5px;
-    padding: 20px;
+    background: var(--secondary-bg);
+    background-image: linear-gradient(135deg, var(--secondary-bg) 0%, rgba(30, 144, 255, 0.05) 100%);
+    border: 2px solid var(--border-color);
+    border-radius: 20px;
+    padding: 25px;
     height: fit-content;
     position: sticky;
-    top: 20px;
+    top: 120px;
+    backdrop-filter: blur(20px);
+    box-shadow: var(--shadow-lg);
 }
 
 .sidebar-section {
-    margin-bottom: 30px;
+    margin-bottom: 35px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .sidebar-section:last-child {
     margin-bottom: 0;
+    border-bottom: none;
 }
 
 .sidebar-section h3 {
-    font-size: 1.1em;
-    border: none;
-    margin-bottom: 15px;
-    color: #000;
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    color: var(--accent-blue);
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-/* Statistics */
+.sidebar-section h3::before {
+    content: '📊';
+    font-size: 1.1em;
+}
+
+/* Statistics - Gaming Enhancement */
 .stats {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display: grid;
+    gap: 15px;
 }
 
 .stat-item {
     display: flex;
     justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px solid #eaecf0;
+    padding: 15px;
+    background: rgba(26, 26, 26, 0.5);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-normal);
 }
 
-.stat-item:last-child {
-    border-bottom: none;
+.stat-item:hover {
+    background: rgba(30, 144, 255, 0.1);
+    border-color: var(--accent-blue);
+    transform: translateX(5px);
 }
 
 .stat-number {
-    font-weight: bold;
-    color: #0645ad;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--accent-green);
+    text-shadow: 0 0 10px rgba(0, 255, 127, 0.3);
 }
 
 .stat-label {
-    color: #54595d;
-    font-size: 0.9em;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
 }
 
-/* Quick Navigation */
+/* Quick Navigation - Gaming Enhancement */
 .quick-nav {
     list-style: none;
 }
 
 .quick-nav li {
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 }
 
 .quick-nav a {
     display: block;
-    padding: 5px 0;
-    color: #0645ad;
-    font-size: 0.9em;
+    padding: 12px 15px;
+    color: var(--text-primary);
+    border-radius: 10px;
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
 }
 
-/* Recently Viewed */
+.quick-nav a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-accent);
+    transition: left var(--transition-normal);
+    z-index: -1;
+}
+
+.quick-nav a:hover::before {
+    left: 0;
+}
+
+.quick-nav a:hover {
+    color: var(--primary-bg);
+    transform: translateX(10px);
+}
+
+/* Recently Viewed - Gaming Enhancement */
 .recently-viewed {
-    font-size: 0.9em;
+    font-size: 0.9rem;
 }
 
 .recently-viewed .no-recent {
-    color: #54595d;
+    color: var(--text-muted);
     font-style: italic;
+    text-align: center;
+    padding: 20px;
 }
 
 .recent-item {
-    padding: 5px 0;
-    border-bottom: 1px solid #eaecf0;
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border-color);
+    transition: all var(--transition-normal);
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.recent-item:hover {
+    background: rgba(30, 144, 255, 0.1);
+    transform: translateX(5px);
 }
 
 .recent-item:last-child {
     border-bottom: none;
 }
 
-/* Steam Widget Styles - Enhanced Modern Design */
-.steam-widget {
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-    border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    margin-bottom: 20px;
-    overflow: hidden;
-    position: relative;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.steam-widget::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #66c0f4, #57cbde, #4fc3f7, #66c0f4);
-    background-size: 200% 100%;
-    animation: steamGlow 3s ease-in-out infinite;
-}
-
-@keyframes steamGlow {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-}
-
-.steam-widget:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-}
-
-.steam-widget h3 {
-    color: #ffffff;
-    font-size: 1.1em;
-    margin: 0 0 15px 0;
-    padding: 20px 20px 0 20px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 600;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.steam-icon {
-    width: 24px;
-    height: 24px;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-}
-
-.steam-status-content {
-    padding: 0 20px 20px 20px;
-}
-
-.steam-loading {
-    text-align: center;
-    padding: 30px 20px;
-    color: #ffffff;
-}
-
-.loading-spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-top: 3px solid #66c0f4;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 15px;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.steam-player-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 20px;
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.steam-avatar {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    border: 3px solid #66c0f4;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-}
-
-.steam-avatar:hover {
-    transform: scale(1.05);
-    border-color: #57cbde;
-}
-
-.steam-player-details h4 {
-    color: #ffffff;
-    margin: 0 0 5px 0;
-    font-size: 1.1em;
-    font-weight: 600;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.steam-player-status {
-    font-size: 0.85em;
-    color: #c7d5e0;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.steam-player-status::before {
-    content: '';
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #898989;
-    animation: pulse 2s infinite;
-}
-
-.steam-status-online::before {
-    background: #57cbde;
-}
-
-.steam-status-offline::before {
-    background: #898989;
-}
-
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
-}
-
-.steam-stats {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 20px;
-}
-
-.steam-stat-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 15px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    border-left: 4px solid transparent;
-    border-image: linear-gradient(135deg, #66c0f4, #57cbde) 1;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
-}
-
-.steam-stat-item:hover {
-    background: rgba(255, 255, 255, 0.15);
-    transform: translateX(4px);
-}
-
-.steam-stat-label {
-    font-size: 0.9em;
-    color: #c7d5e0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.steam-stat-label::before {
-    content: '📊';
-    font-size: 0.8em;
-}
-
-.steam-stat-value {
-    font-weight: 700;
-    color: #66c0f4;
-    font-size: 1em;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.steam-recent-games {
-    margin-top: 20px;
-}
-
-.steam-recent-games h4 {
-    color: #ffffff;
-    font-size: 1em;
-    margin-bottom: 15px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid rgba(102, 192, 244, 0.3);
-    position: relative;
-    font-weight: 600;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.steam-recent-games h4::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 40px;
-    height: 2px;
-    background: linear-gradient(90deg, #66c0f4, #57cbde);
-    border-radius: 2px;
-}
-
-.steam-recent-game {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px;
-    margin-bottom: 10px;
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 10px;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.steam-recent-game:hover {
-    background: rgba(102, 192, 244, 0.2);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-}
-
-.steam-recent-game:last-child {
-    margin-bottom: 0;
-}
-
-.steam-game-image {
-    width: 40px;
-    height: 40px;
-    border-radius: 6px;
-    object-fit: cover;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
-}
-
-.steam-recent-game:hover .steam-game-image {
-    border-color: #66c0f4;
-    transform: scale(1.05);
-}
-
-.steam-game-info {
-    flex: 1;
-}
-
-.steam-game-title {
-    font-size: 0.85em;
-    color: #ffffff;
-    margin: 0 0 4px 0;
-    line-height: 1.2;
-    font-weight: 500;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-.steam-game-playtime {
-    font-size: 0.75em;
-    color: #c7d5e0;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.steam-game-playtime::before {
-    content: '⏱️';
-    font-size: 0.8em;
-}
-
-.steam-achievement-progress {
-    margin-top: 15px;
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    border-left: 4px solid transparent;
-    border-image: linear-gradient(135deg, #66c0f4, #57cbde) 1;
-    backdrop-filter: blur(10px);
-}
-
-.steam-achievement-progress h5 {
-    color: #ffffff;
-    margin: 0 0 10px 0;
-    font-size: 0.9em;
-    font-weight: 600;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-.steam-achievement-bar {
-    width: 100%;
-    height: 10px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 5px;
-    overflow: hidden;
-    margin-top: 8px;
-    position: relative;
-}
-
-.steam-achievement-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #66c0f4 0%, #57cbde 50%, #4fc3f7 100%);
-    transition: width 0.8s ease;
-    border-radius: 5px;
-    position: relative;
-}
-
-.steam-achievement-fill::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    animation: achievementShine 2s ease-in-out infinite;
-}
-
-@keyframes achievementShine {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-}
-
-.steam-error {
-    text-align: center;
-    padding: 30px 20px;
-    color: #ff6b6b;
-    background: rgba(255, 107, 107, 0.1);
-    border-radius: 10px;
-    border: 1px solid rgba(255, 107, 107, 0.2);
-}
-
-.steam-error-icon {
-    font-size: 2.5em;
-    margin-bottom: 15px;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-}
-
-.steam-connect-btn {
-    background: linear-gradient(135deg, #66c0f4 0%, #57cbde 100%);
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.9em;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    width: 100%;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-.steam-connect-btn:hover {
-    background: linear-gradient(135deg, #57cbde 0%, #66c0f4 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-}
-
-.steam-connect-btn:active {
-    transform: translateY(0);
-}
-
-.steam-config {
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-}
-
-.steam-config input {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-    font-size: 0.9em;
-    box-sizing: border-box;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
-}
-
-.steam-config input:focus {
-    outline: none;
-    border-color: #66c0f4;
-    box-shadow: 0 0 0 3px rgba(102, 192, 244, 0.2);
-    background: rgba(255, 255, 255, 0.15);
-}
-
-.steam-config input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
-}
-
-.steam-config label {
-    display: block;
-    color: #ffffff;
-    font-size: 0.9em;
-    margin-bottom: 8px;
-    font-weight: 500;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-.steam-config button {
-    margin-top: 8px;
-}
-
-.steam-help-text {
-    margin-top: 15px;
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    font-size: 0.85em;
-    color: #c7d5e0;
-    line-height: 1.5;
-}
-
-.steam-help-text a {
-    color: #66c0f4;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.steam-help-text a:hover {
-    color: #57cbde;
-    text-decoration: underline;
-}
-
-/* Search Results */
+/* Search Results - Gaming Enhancement */
 .search-results {
-    margin-bottom: 30px;
+    background: var(--secondary-bg);
+    border: 2px solid var(--accent-blue);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 40px;
+    backdrop-filter: blur(20px);
+    box-shadow: var(--shadow-lg);
 }
 
 .results-list {
     display: grid;
-    gap: 15px;
+    gap: 20px;
 }
 
 .result-item {
-    background-color: #f8f9fa;
-    border: 1px solid #a2a9b1;
-    border-radius: 5px;
-    padding: 15px;
+    background: rgba(26, 26, 26, 0.5);
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    padding: 25px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.result-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-accent);
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+    z-index: -1;
+}
+
+.result-item:hover::before {
+    opacity: 0.1;
 }
 
 .result-item:hover {
-    background-color: #eaecf0;
+    transform: translateY(-5px);
+    border-color: var(--accent-green);
+    box-shadow: 0 10px 30px rgba(0, 255, 127, 0.3);
 }
 
 .result-title {
-    font-size: 1.2em;
-    color: #0645ad;
-    margin-bottom: 5px;
-    border: none;
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+    color: var(--accent-green);
 }
 
 .result-meta {
-    font-size: 0.9em;
-    color: #54595d;
-    margin-bottom: 10px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 15px;
 }
 
 .result-description {
-    font-size: 0.95em;
-    line-height: 1.5;
+    color: var(--text-primary);
+    line-height: 1.6;
 }
 
-/* Footer */
+/* Footer - Gaming Enhancement */
 .site-footer {
-    background-color: #f8f9fa;
-    border-top: 1px solid #a2a9b1;
-    margin-top: 50px;
-    padding: 20px 0;
+    background: var(--secondary-bg);
+    border-top: 2px solid var(--accent-blue);
+    padding: 40px 0;
+    margin-top: 60px;
     text-align: center;
 }
 
 .footer-nav {
-    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
 }
 
 .footer-nav a {
-    margin: 0 10px;
-    font-size: 0.9em;
+    color: var(--text-secondary);
+    padding: 10px 20px;
+    border-radius: 20px;
+    transition: all var(--transition-normal);
 }
 
-/* Game Page Styles */
-.game-page {
-    display: grid;
-    grid-template-columns: 1fr 300px;
-    gap: 30px;
-}
-
-.game-content {
-    max-width: none;
-}
-
-.game-title {
-    font-size: 2.5em;
-    border-bottom: 3px solid #a2a9b1;
-    margin-bottom: 20px;
-}
-
-/* Infobox */
-.infobox {
-    background-color: #f8f9fa;
-    border: 1px solid #a2a9b1;
-    border-radius: 5px;
-    padding: 15px;
-    margin-bottom: 20px;
-    width: 100%;
-}
-
-.infobox-title {
-    font-size: 1.2em;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 15px;
-    border: none;
-}
-
-.infobox-image {
-    width: 100%;
-    height: auto;
-    border-radius: 3px;
-    margin-bottom: 15px;
-}
-
-.infobox-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.infobox-table tr {
-    border-bottom: 1px solid #eaecf0;
-}
-
-.infobox-table tr:last-child {
-    border-bottom: none;
-}
-
-.infobox-table td {
-    padding: 8px;
-    vertical-align: top;
-}
-
-.infobox-label {
-    font-weight: bold;
-    color: #54595d;
-    width: 40%;
-}
-
-.infobox-value {
-    width: 60%;
-}
-
-/* Table of Contents */
-.toc {
-    background-color: #f8f9fa;
-    border: 1px solid #a2a9b1;
-    border-radius: 5px;
-    padding: 15px;
-    margin: 20px 0;
-    width: fit-content;
-}
-
-.toc-title {
-    font-weight: bold;
-    margin-bottom: 10px;
-    border: none;
-}
-
-.toc ul {
-    list-style: none;
-    margin-left: 20px;
-}
-
-.toc a {
-    color: #0645ad;
-    font-size: 0.9em;
+.footer-nav a:hover {
+    color: var(--accent-blue);
+    background: rgba(30, 144, 255, 0.1);
 }
 
 /* Responsive Design */
+@media screen and (max-width: 1024px) {
+    .content-wrapper {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .sidebar {
+        position: static;
+        order: -1;
+    }
+    
+    .featured-game {
+        grid-template-columns: 250px 1fr;
+        gap: 20px;
+    }
+}
+
 @media screen and (max-width: 768px) {
     .container {
         padding: 0 15px;
     }
     
-    .content-wrapper {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-    
-    .sidebar {
-        order: -1;
-        position: static;
-    }
-    
     .header-content {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
+        text-align: center;
     }
     
     .main-nav ul {
-        flex-wrap: wrap;
-        gap: 10px;
+        justify-content: center;
     }
     
     .search-box {
@@ -1046,101 +916,30 @@ a:active {
     }
     
     .recent-games {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    }
-    
-    .game-page {
-        grid-template-columns: 1fr;
-    }
-    
-    .infobox {
-        order: -1;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     }
     
     .stats {
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 15px;
-    }
-    
-    .stat-item {
-        flex-direction: column;
-        text-align: center;
-        border: 1px solid #eaecf0;
-        border-radius: 3px;
-        padding: 10px;
-        flex: 1;
-        min-width: 80px;
-    }
-
-    /* Steam Widget Responsive Design */
-    .steam-widget {
-        margin-bottom: 20px;
-    }
-    
-    .steam-player-info {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .steam-recent-game {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .steam-game-image {
-        width: 48px;
-        height: 48px;
+        grid-template-columns: 1fr;
     }
 }
 
 @media screen and (max-width: 480px) {
     .site-title {
-        font-size: 1.8em;
+        font-size: 2rem;
     }
     
     .search-title {
-        font-size: 1.5em;
+        font-size: 1.8rem;
     }
     
     .recent-games {
         grid-template-columns: 1fr;
     }
     
-    .stats {
-        flex-direction: column;
-    }
-    
-    .stat-item {
-        flex-direction: row;
-        justify-content: space-between;
-    }
-}
-
-/* Print Styles */
-@media print {
-    .sidebar,
-    .search-section,
-    .main-nav,
     .footer-nav {
-        display: none;
-    }
-    
-    .content-wrapper {
-        grid-template-columns: 1fr;
-    }
-    
-    .game-page {
-        grid-template-columns: 1fr;
-    }
-    
-    body {
-        font-size: 12pt;
-        line-height: 1.4;
-    }
-    
-    h1, h2, h3 {
-        page-break-after: avoid;
+        flex-direction: column;
+        gap: 15px;
     }
 }
 
@@ -1150,7 +949,7 @@ a:active {
 }
 
 .loading {
-    opacity: 0.6;
+    opacity: 0.7;
     pointer-events: none;
 }
 
@@ -1159,608 +958,803 @@ a:active {
 }
 
 .text-muted {
-    color: #54595d;
+    color: var(--text-muted);
 }
 
+/* Margin utilities */
 .mb-0 { margin-bottom: 0; }
-.mb-1 { margin-bottom: 0.5em; }
-.mb-2 { margin-bottom: 1em; }
-.mb-3 { margin-bottom: 1.5em; }
-
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
 .mt-0 { margin-top: 0; }
-.mt-1 { margin-top: 0.5em; }
-.mt-2 { margin-top: 1em; }
-.mt-3 { margin-top: 1.5em; }
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
 
-/* Enhanced Steam Widget Styles - Advanced Gaming Features */
-
-/* Comprehensive Layout */
-.steam-comprehensive-layout {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
 }
 
-/* Enhanced Stats Grid */
-.steam-enhanced-stats {
+::-webkit-scrollbar-track {
+    background: var(--secondary-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-blue);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-green);
+}
+
+/* Selection styling */
+::selection {
+    background: var(--accent-blue);
+    color: var(--primary-bg);
+}
+
+/* Focus styles for accessibility */
+*:focus {
+    outline: 2px solid var(--accent-green);
+    outline-offset: 2px;
+}
+
+/* Loading animations */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+.bounce {
+    animation: bounce 1s infinite;
+}
+
+/* Performance optimizations */
+.game-card,
+.category-card,
+.result-item {
+    will-change: transform;
+}
+
+/* Enhanced Steam Widget Styles - Modern Gaming Design */
+.steam-widget {
+    background: var(--secondary-bg);
+    background-image: linear-gradient(135deg, var(--secondary-bg) 0%, rgba(30, 144, 255, 0.05) 100%);
+    border: 2px solid var(--accent-blue);
+    border-radius: 20px;
+    box-shadow: var(--shadow-lg);
     margin-bottom: 20px;
+    overflow: hidden;
+    position: relative;
+    transition: all var(--transition-normal);
+    backdrop-filter: blur(20px);
 }
 
-.steam-stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 12px;
-    margin-top: 15px;
+.steam-widget::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--gradient-neon);
+    background-size: 300% 100%;
+    animation: neonFlow 3s linear infinite;
 }
 
-.steam-stat-card {
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 12px;
-    padding: 15px;
+.steam-widget:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 50px rgba(30, 144, 255, 0.3);
+}
+
+.steam-widget h3 {
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    margin: 0 0 20px 0;
+    padding: 20px 20px 0 20px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
+    gap: 10px;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.steam-stat-card:hover {
-    background: rgba(255, 255, 255, 0.15);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-}
-
-.steam-stat-icon {
-    font-size: 1.8em;
+.steam-icon {
+    width: 28px;
+    height: 28px;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
-.steam-stat-content {
-    flex: 1;
+.steam-status-content {
+    padding: 0 20px 20px 20px;
+}
+
+.steam-loading {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-primary);
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-top: 4px solid var(--accent-blue);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Steam Player Info - Enhanced */
+.steam-player-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all var(--transition-normal);
+}
+
+.steam-player-info:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+}
+
+.steam-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 3px solid var(--accent-blue);
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-normal);
+}
+
+.steam-avatar:hover {
+    transform: scale(1.05);
+    border-color: var(--accent-green);
+    box-shadow: 0 0 20px rgba(0, 255, 127, 0.5);
+}
+
+.steam-player-details h4 {
+    color: var(--text-primary);
+    margin: 0 0 8px 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.steam-player-status {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.steam-player-status::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent-green);
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 10px rgba(0, 255, 127, 0.5);
+}
+
+/* Steam Stats Grid - Gaming Dashboard */
+.steam-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.steam-stat-item {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    transition: all var(--transition-normal);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.steam-stat-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-accent);
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+    z-index: -1;
+}
+
+.steam-stat-item:hover::before {
+    opacity: 0.1;
+}
+
+.steam-stat-item:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-blue);
+    box-shadow: 0 10px 25px rgba(30, 144, 255, 0.3);
 }
 
 .steam-stat-value {
-    font-size: 1.1em;
+    font-size: 1.3rem;
     font-weight: 700;
-    color: #66c0f4;
-    margin-bottom: 2px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    color: var(--accent-green);
+    margin-bottom: 5px;
+    text-shadow: 0 0 10px rgba(0, 255, 127, 0.3);
 }
 
 .steam-stat-label {
-    font-size: 0.75em;
-    color: #c7d5e0;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
     font-weight: 500;
 }
 
-/* Enhanced Game Cards */
-.steam-recent-games-enhanced {
-    margin-bottom: 20px;
+/* Steam Recent Games - Enhanced Grid */
+.steam-recent-games {
+    margin-bottom: 25px;
+}
+
+.steam-recent-games h4 {
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(30, 144, 255, 0.3);
+    position: relative;
+    font-weight: 600;
+}
+
+.steam-recent-games h4::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background: var(--gradient-accent);
+    border-radius: 2px;
 }
 
 .steam-games-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 15px;
-    margin-bottom: 15px;
 }
 
-.steam-enhanced-game-card {
-    background: rgba(255, 255, 255, 0.08);
+.steam-recent-game {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 12px;
-    overflow: hidden;
-    transition: all 0.3s ease;
+    transition: all var(--transition-normal);
     cursor: pointer;
     border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.steam-enhanced-game-card:hover {
-    background: rgba(255, 255, 255, 0.12);
-    transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-}
-
-.steam-game-header {
     position: relative;
-    height: 120px;
     overflow: hidden;
 }
 
-.steam-game-header-img {
+.steam-recent-game::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
+    background: var(--gradient-accent);
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+    z-index: -1;
 }
 
-.steam-enhanced-game-card:hover .steam-game-header-img {
-    transform: scale(1.05);
+.steam-recent-game:hover::before {
+    opacity: 0.1;
 }
 
-.steam-game-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-    padding: 15px;
-    color: white;
+.steam-recent-game:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent-green);
+    box-shadow: 0 8px 20px rgba(0, 255, 127, 0.3);
 }
 
-.steam-game-name {
-    font-size: 1em;
-    font-weight: 600;
-    margin: 0 0 5px 0;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
-}
-
-.steam-game-meta {
-    display: flex;
-    gap: 10px;
-    font-size: 0.8em;
-}
-
-.steam-playtime {
-    background: rgba(102, 192, 244, 0.8);
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-weight: 500;
-}
-
-.steam-recent-time {
-    background: rgba(87, 203, 222, 0.8);
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-weight: 500;
-}
-
-.steam-game-details {
-    padding: 15px;
-}
-
-.steam-game-desc {
-    font-size: 0.8em;
-    color: #c7d5e0;
-    margin: 0 0 10px 0;
-    line-height: 1.4;
-}
-
-.steam-game-info-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 8px;
-}
-
-.steam-genre-tag {
-    background: rgba(102, 192, 244, 0.2);
-    color: #66c0f4;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 0.7em;
-    font-weight: 500;
-    border: 1px solid rgba(102, 192, 244, 0.3);
-}
-
-.steam-score-badge {
-    background: linear-gradient(135deg, #4caf50, #45a049);
-    color: white;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 0.7em;
-    font-weight: 600;
-}
-
-.steam-price-tag {
-    background: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 0.7em;
-    font-weight: 600;
-}
-
-.steam-price-tag.discounted {
-    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-}
-
-.steam-price-tag s {
-    opacity: 0.7;
-    margin-left: 4px;
-}
-
-.steam-achievement-mini {
-    font-size: 0.75em;
-    color: #ffa500;
-    font-weight: 500;
-}
-
-.steam-view-all-btn {
-    background: rgba(255, 255, 255, 0.1);
-    color: #66c0f4;
-    border: 1px solid rgba(102, 192, 244, 0.3);
-    padding: 10px 20px;
+.steam-game-image {
+    width: 50px;
+    height: 50px;
     border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.85em;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    width: 100%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    transition: all var(--transition-normal);
 }
 
-.steam-view-all-btn:hover {
-    background: rgba(102, 192, 244, 0.2);
-    border-color: #66c0f4;
-    transform: translateY(-1px);
+.steam-recent-game:hover .steam-game-image {
+    border-color: var(--accent-blue);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(30, 144, 255, 0.5);
 }
 
-/* Achievement Progress */
-.steam-achievements-section {
-    margin-bottom: 20px;
+.steam-game-info {
+    flex: 1;
 }
 
-.steam-overall-achievement {
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 10px;
-    padding: 15px;
-    margin-bottom: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+.steam-game-title {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    margin: 0 0 5px 0;
+    line-height: 1.2;
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-.steam-achievement-summary {
+.steam-game-playtime {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin: 0;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    gap: 5px;
 }
 
-.steam-achievement-total {
-    color: #ffffff;
+.steam-game-playtime::before {
+    content: '⏱️';
+    font-size: 0.8em;
+}
+
+/* Steam Achievement Progress - Enhanced */
+.steam-achievement-progress {
+    margin-bottom: 25px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.steam-achievement-progress h5 {
+    color: var(--text-primary);
+    margin: 0 0 15px 0;
+    font-size: 1rem;
     font-weight: 600;
-    font-size: 0.9em;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-.steam-achievement-overall {
-    color: #66c0f4;
-    font-weight: 700;
-    font-size: 0.9em;
-}
-
-.steam-achievement-bar-main {
+.steam-achievement-bar {
     width: 100%;
     height: 12px;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 6px;
     overflow: hidden;
+    margin: 10px 0;
     position: relative;
 }
 
-.steam-achievement-fill-main {
+.steam-achievement-fill {
     height: 100%;
-    background: linear-gradient(90deg, #66c0f4 0%, #57cbde 50%, #4fc3f7 100%);
+    background: var(--gradient-accent);
+    transition: width 0.8s ease;
     border-radius: 6px;
-    transition: width 1s ease;
     position: relative;
 }
 
-.steam-achievement-fill-main::after {
+.steam-achievement-fill::after {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-    animation: achievementShine 3s ease-in-out infinite;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: achievementShine 2s ease-in-out infinite;
 }
 
-.steam-achievement-item {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
-    padding: 12px;
-    margin-bottom: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+@keyframes achievementShine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
 }
 
-.steam-achievement-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-}
-
-.steam-achievement-count {
-    color: #ffffff;
+/* Steam Connect Button - Enhanced */
+.steam-connect-btn {
+    background: var(--gradient-accent);
+    color: var(--primary-bg);
+    border: none;
+    padding: 15px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
     font-weight: 600;
-    font-size: 0.85em;
+    transition: all var(--transition-normal);
+    width: 100%;
+    box-shadow: var(--shadow-md);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
 }
 
-.steam-achievement-percentage {
-    color: #66c0f4;
-    font-weight: 700;
-    font-size: 0.85em;
+.steam-connect-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left var(--transition-normal);
 }
 
-/* Recommendations */
-.steam-recommendations-section {
-    margin-bottom: 20px;
+.steam-connect-btn:hover::before {
+    left: 100%;
 }
 
-.steam-recommendations-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 15px;
+.steam-connect-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-neon);
 }
 
-.steam-recommendation-card {
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 12px;
-    padding: 15px;
-    transition: all 0.3s ease;
+.steam-connect-btn:active {
+    transform: translateY(0);
+}
+
+/* Steam Configuration - Enhanced */
+.steam-config {
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 15px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
 }
 
-.steam-recommendation-card:hover {
-    background: rgba(255, 255, 255, 0.12);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-}
-
-.steam-rec-content {
+.steam-config input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: all var(--transition-normal);
     margin-bottom: 15px;
 }
 
-.steam-rec-title {
-    color: #ffffff;
-    font-size: 1em;
-    font-weight: 600;
-    margin: 0 0 8px 0;
+.steam-config input:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 20px rgba(30, 144, 255, 0.3);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.steam-config input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.steam-config label {
+    display: block;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    font-weight: 500;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-.steam-rec-reason {
-    color: #c7d5e0;
-    font-size: 0.8em;
-    margin: 0 0 10px 0;
-    line-height: 1.4;
+/* Steam Error States - Enhanced */
+.steam-error {
+    text-align: center;
+    padding: 30px 20px;
+    color: var(--error-color);
+    background: rgba(255, 68, 68, 0.1);
+    border-radius: 15px;
+    border: 2px solid rgba(255, 68, 68, 0.3);
+    backdrop-filter: blur(10px);
 }
 
-.steam-rec-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.steam-error-icon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
-.steam-rec-score {
-    background: linear-gradient(135deg, #4caf50, #45a049);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.75em;
-    font-weight: 600;
-}
-
-.steam-rec-price {
-    color: #66c0f4;
-    font-weight: 700;
-    font-size: 0.9em;
-}
-
-.steam-rec-btn {
-    background: linear-gradient(135deg, #66c0f4, #57cbde);
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.8em;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    width: 100%;
-}
-
-.steam-rec-btn:hover {
-    background: linear-gradient(135deg, #57cbde, #66c0f4);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-/* Game Details Modal */
-.steam-game-modal {
+/* Steam Notifications - Gaming Style */
+.steam-notification {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(5px);
+    bottom: 20px;
+    right: 20px;
+    background: var(--secondary-bg);
+    border: 2px solid var(--accent-green);
+    border-radius: 12px;
+    padding: 15px 20px;
+    color: var(--text-primary);
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(20px);
+    transform: translateX(400px);
+    transition: transform var(--transition-normal);
+    z-index: 9999;
+    max-width: 350px;
 }
 
-.steam-modal-content {
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-    border-radius: 16px;
-    max-width: 600px;
-    width: 90%;
-    max-height: 80vh;
-    overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+.steam-notification.show {
+    transform: translateX(0);
 }
 
-.steam-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+.steam-notification.success {
+    border-color: var(--accent-green);
 }
 
-.steam-modal-header h3 {
-    color: #ffffff;
-    margin: 0;
-    font-size: 1.3em;
-    font-weight: 600;
+.steam-notification.error {
+    border-color: var(--error-color);
 }
 
-.steam-modal-close {
-    background: none;
-    border: none;
-    color: #ffffff;
-    font-size: 1.5em;
-    cursor: pointer;
-    padding: 5px;
-    border-radius: 4px;
-    transition: background 0.3s ease;
+.steam-notification.info {
+    border-color: var(--accent-blue);
 }
 
-.steam-modal-close:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.steam-modal-body {
-    padding: 20px;
-    color: #c7d5e0;
-    overflow-y: auto;
-}
-
-/* Responsive Enhancements */
+/* Steam Widget Responsive Design */
 @media screen and (max-width: 768px) {
-    .steam-stats-grid {
+    .steam-stats {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
     }
     
-    .steam-stat-card {
-        padding: 12px;
+    .steam-player-info {
         flex-direction: column;
         text-align: center;
-        gap: 8px;
+        gap: 10px;
     }
     
-    .steam-games-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .steam-recommendations-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .steam-achievement-summary {
+    .steam-recent-game {
         flex-direction: column;
-        gap: 5px;
         text-align: center;
+        gap: 10px;
     }
     
-    .steam-game-info-row {
-        justify-content: center;
-    }
-    
-    .steam-modal-content {
-        width: 95%;
-        margin: 10px;
+    .steam-game-image {
+        width: 60px;
+        height: 60px;
     }
 }
 
 @media screen and (max-width: 480px) {
-    .steam-stats-grid {
+    .steam-stats {
         grid-template-columns: 1fr;
     }
     
-    .steam-stat-card {
-        flex-direction: row;
-        text-align: left;
+    .steam-widget {
+        margin: 0 -5px 20px -5px;
+        border-radius: 15px;
     }
-    
-    .steam-game-header {
-        height: 100px;
-    }
-    
-    .steam-comprehensive-layout {
-        gap: 15px;
-    }
+}
+
+/* Global Loading Animation */
+#global-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    backdrop-filter: blur(10px);
+}
+
+.loading-content {
+    text-align: center;
+    color: var(--text-primary);
+}
+
+.loading-content h3 {
+    margin: 20px 0;
+    font-size: 1.5rem;
+    color: var(--accent-blue);
+}
+
+.loading-progress {
+    width: 300px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.progress-bar {
+    height: 100%;
+    background: var(--gradient-accent);
+    width: 0%;
+    transition: width 0.3s ease;
+    position: relative;
+}
+
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: progressShine 1.5s ease-in-out infinite;
+}
+
+@keyframes progressShine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Notification System */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    border-radius: 12px;
+    padding: 15px;
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-lg);
+    transform: translateX(100%);
+    transition: transform var(--transition-normal);
+    max-width: 400px;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.notification-icon {
+    font-size: 1.5rem;
+}
+
+.notification-text {
+    flex: 1;
+    color: var(--text-primary);
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color var(--transition-fast);
+}
+
+.notification-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.notification-error {
+    background: var(--secondary-bg);
+    border: 2px solid var(--error-color);
+}
+
+.notification-success {
+    background: var(--secondary-bg);
+    border: 2px solid var(--success-color);
+}
+
+.notification-info {
+    background: var(--secondary-bg);
+    border: 2px solid var(--accent-blue);
+}
+
+/* Tooltip System */
+.tooltip {
+    position: absolute;
+    background: var(--secondary-bg);
+    color: var(--text-primary);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    z-index: 1000;
+    pointer-events: none;
+    border: 1px solid var(--accent-blue);
+    box-shadow: var(--shadow-md);
+    backdrop-filter: blur(10px);
 }
 
 /* Animation Keyframes */
-@keyframes steamGlow {
-    0%, 100% { 
-        background-position: 0% 50%; 
-        opacity: 1;
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
     }
-    50% { 
-        background-position: 100% 50%; 
-        opacity: 0.8;
+    100% {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
-@keyframes achievementShine {
-    0% { 
-        transform: translateX(-100%); 
+@keyframes fadeInDown {
+    0% {
         opacity: 0;
+        transform: translateY(-30px);
     }
-    50% {
+    100% {
         opacity: 1;
-    }
-    100% { 
-        transform: translateX(100%); 
-        opacity: 0;
+        transform: translateY(0);
     }
 }
 
-@keyframes pulse {
-    0%, 100% { 
-        opacity: 1; 
+@keyframes fadeInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 1;
         transform: scale(1);
     }
-    50% { 
-        opacity: 0.7; 
-        transform: scale(1.05);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
-}
-
-/* Enhanced Loading Animation */
-.steam-loading .loading-spinner {
-    width: 50px;
-    height: 50px;
-    border: 4px solid rgba(255, 255, 255, 0.2);
-    border-top: 4px solid #66c0f4;
-    border-radius: 50%;
-    animation: spin 1.2s linear infinite;
-    margin: 0 auto 20px;
-}
-
-/* Enhanced Tooltips */
-.steam-tooltip {
-    position: relative;
-    cursor: help;
-}
-
-.steam-tooltip::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.9);
-    color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-size: 0.8em;
-    white-space: nowrap;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    z-index: 1000;
-}
-
-.steam-tooltip:hover::after {
-    opacity: 1;
-    visibility: visible;
-    bottom: calc(100% + 5px);
 }
