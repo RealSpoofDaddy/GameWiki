@@ -607,458 +607,431 @@ window.showMultiplayerGames = showMultiplayerGames;
 window.addToRecentlyViewed = addToRecentlyViewed;
 window.applyFilters = applyFilters;
 
-// Steam Widget Functionality
+// Steam Widget - Secure Implementation
 class SteamWidget {
     constructor() {
-        this.container = document.getElementById('steamStatus');
-        this.playerData = null;
-        this.isDemo = true; // Will be set to false when Steam API is configured
-        this.demoData = this.generateDemoData();
-        this.updateInterval = null;
-        this.apiKey = localStorage.getItem('steam_api_key') || '';
-        this.steamId = localStorage.getItem('steam_id') || '';
-        this.baseUrl = window.location.origin; // Use same origin for proxy
-    }
-
-    generateDemoData() {
-        return {
-            player: {
-                steamid: "76561198123456789",
-                personaname: "GameMaster2024",
-                profileurl: "https://steamcommunity.com/profiles/76561198123456789/",
-                avatar: "https://avatars.steamstatic.com/b2c3e5b2c3e5b2c3e5b2c3e5b2c3e5b2c3e5b2_full.jpg",
-                avatarmedium: "https://avatars.steamstatic.com/b2c3e5b2c3e5b2c3e5b2c3e5b2c3e5b2c3e5b2_medium.jpg",
-                avatarfull: "https://avatars.steamstatic.com/b2c3e5b2c3e5b2c3e5b2c3e5b2c3e5b2c3e5b2_full.jpg",
-                personastate: 1, // 1 = online
-                realname: "John Doe",
-                primaryclanid: "103582791429521408",
-                timecreated: 1234567890,
-                personastateflags: 0,
-                loccountrycode: "US"
-            },
-            games: {
-                game_count: 247,
-                games: [
-                    {
-                        appid: 730,
-                        name: "Counter-Strike 2",
-                        playtime_forever: 1547,
-                        img_icon_url: "69f7ebe2735c7c6c_icon.jpg",
-                        playtime_windows_forever: 1547,
-                        playtime_mac_forever: 0,
-                        playtime_linux_forever: 0,
-                        rtime_last_played: Date.now() / 1000 - 3600 // 1 hour ago
-                    },
-                    {
-                        appid: 1172470,
-                        name: "Apex Legends",
-                        playtime_forever: 892,
-                        img_icon_url: "apollo_icon.jpg",
-                        playtime_windows_forever: 892,
-                        playtime_mac_forever: 0,
-                        playtime_linux_forever: 0,
-                        rtime_last_played: Date.now() / 1000 - 7200 // 2 hours ago
-                    },
-                    {
-                        appid: 292030,
-                        name: "The Witcher 3: Wild Hunt",
-                        playtime_forever: 2156,
-                        img_icon_url: "witcher3_icon.jpg",
-                        playtime_windows_forever: 2156,
-                        playtime_mac_forever: 0,
-                        playtime_linux_forever: 0,
-                        rtime_last_played: Date.now() / 1000 - 86400 // 1 day ago
-                    },
-                    {
-                        appid: 271590,
-                        name: "Grand Theft Auto V",
-                        playtime_forever: 756,
-                        img_icon_url: "gta5_icon.jpg",
-                        playtime_windows_forever: 756,
-                        playtime_mac_forever: 0,
-                        playtime_linux_forever: 0,
-                        rtime_last_played: Date.now() / 1000 - 172800 // 2 days ago
-                    },
-                    {
-                        appid: 1091500,
-                        name: "Cyberpunk 2077",
-                        playtime_forever: 423,
-                        img_icon_url: "cyberpunk_icon.jpg",
-                        playtime_windows_forever: 423,
-                        playtime_mac_forever: 0,
-                        playtime_linux_forever: 0,
-                        rtime_last_played: Date.now() / 1000 - 259200 // 3 days ago
-                    }
-                ]
-            }
-        };
-    }
-
-    async initialize() {
-        try {
-            // Check if we have Steam API configuration
-            if (this.apiKey && this.steamId) {
-                this.isDemo = false;
-                await this.configureSteamAPI(this.apiKey);
-                this.showLoading();
-                await this.loadSteamData();
-            } else {
-                this.isDemo = true;
-                this.showConfiguration();
-                return;
-            }
-            
-            // Set up automatic updates
-            this.startAutoUpdate();
-            
-        } catch (error) {
-            console.error('Error initializing Steam widget:', error);
-            this.showError('Failed to load Steam data');
-        }
-    }
-
-    showLoading() {
-        this.container.innerHTML = `
-            <div class="steam-loading">
-                <div class="loading-spinner"></div>
-                <p>Loading Steam data...</p>
-            </div>
-        `;
-    }
-
-    showError(message) {
-        this.container.innerHTML = `
-            <div class="steam-error">
-                <div class="steam-error-icon">⚠️</div>
-                <p>${message}</p>
-                <button class="steam-connect-btn" onclick="steamWidget.initialize()">
-                    Retry Connection
-                </button>
-                <button class="steam-connect-btn" onclick="steamWidget.showConfiguration()" style="margin-top: 10px;">
-                    Reconfigure Steam API
-                </button>
-            </div>
-        `;
-    }
-
-    showConfiguration() {
-        this.container.innerHTML = `
-            <div class="steam-config">
-                <h4 style="color: #66c0f4; margin-bottom: 15px; border: none;">Configure Steam API</h4>
-                <div style="margin-bottom: 15px;">
-                    <label style="display: block; color: #c7d5e0; font-size: 0.85em; margin-bottom: 5px;">Steam API Key:</label>
-                    <input type="password" id="steamApiKey" placeholder="Enter your Steam API key" 
-                           style="width: 100%; padding: 8px; border: 1px solid #66c0f4; border-radius: 4px; background: #1b2838; color: #c7d5e0; font-size: 0.85em;" 
-                           value="${this.apiKey}">
-                </div>
-                <div style="margin-bottom: 15px;">
-                    <label style="display: block; color: #c7d5e0; font-size: 0.85em; margin-bottom: 5px;">Steam ID:</label>
-                    <input type="text" id="steamId" placeholder="Enter your Steam ID" 
-                           style="width: 100%; padding: 8px; border: 1px solid #66c0f4; border-radius: 4px; background: #1b2838; color: #c7d5e0; font-size: 0.85em;" 
-                           value="${this.steamId}">
-                </div>
-                <div style="margin-bottom: 15px;">
-                    <button class="steam-connect-btn" onclick="steamWidget.saveConfiguration()">
-                        Save & Connect
-                    </button>
-                </div>
-                <div style="margin-bottom: 15px;">
-                    <button class="steam-connect-btn" onclick="steamWidget.useDemo()" style="background: #2a475e;">
-                        Use Demo Mode
-                    </button>
-                </div>
-                <div style="font-size: 0.8em; color: #898989; line-height: 1.4;">
-                    <p><strong>Need help?</strong></p>
-                    <p>• Get API Key: <a href="https://steamcommunity.com/dev/apikey" target="_blank" style="color: #66c0f4;">steamcommunity.com/dev/apikey</a></p>
-                    <p>• Find Steam ID: <a href="https://steamidfinder.com/" target="_blank" style="color: #66c0f4;">steamidfinder.com</a></p>
-                </div>
-            </div>
-        `;
-    }
-
-    async saveConfiguration() {
-        const apiKey = document.getElementById('steamApiKey').value.trim();
-        const steamId = document.getElementById('steamId').value.trim();
-
-        if (!apiKey || !steamId) {
-            alert('Please enter both Steam API Key and Steam ID');
-            return;
-        }
-
-        // Save to localStorage
-        localStorage.setItem('steam_api_key', apiKey);
-        localStorage.setItem('steam_id', steamId);
-        
-        this.apiKey = apiKey;
-        this.steamId = steamId;
+        this.baseUrl = window.location.origin;
         this.isDemo = false;
+        this.sessionToken = localStorage.getItem('steam_session_token') || null;
+        this.demoData = {
+            // Demo data for testing without real Steam API
+            player: {
+                personaname: "GamerDemo",
+                avatarfull: "https://avatars.steamstatic.com/b5bd56c1aa4644a474a2e4972be27ef9e82e517e_full.jpg",
+                personastate: 1,
+                profileurl: "https://steamcommunity.com/profiles/76561198123456789"
+            },
+            stats: {
+                total_games: 156,
+                total_playtime: "2,847 hours",
+                most_played: "Counter-Strike 2"
+            },
+            recentGames: [
+                {
+                    name: "Counter-Strike 2",
+                    playtime_forever: 1247,
+                    img_icon_url: "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/730/69f7ebe2735c366c65c0b33dae00e12dc40edbe4.jpg",
+                    appid: 730
+                },
+                {
+                    name: "Cyberpunk 2077",
+                    playtime_forever: 89,
+                    img_icon_url: "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/1091500/836fb70d06ed5a7e4b3b4c2b7a8c1a7ecb1e9d6e.jpg",
+                    appid: 1091500
+                },
+                {
+                    name: "Baldur's Gate 3",
+                    playtime_forever: 156,
+                    img_icon_url: "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/1086940/8c1c6e2e2e7e2e2e2e2e2e2e2e2e2e2e2e2e2e2e.jpg",
+                    appid: 1086940
+                }
+            ]
+        };
+        
+        this.init();
+    }
 
-        try {
-            this.showLoading();
-            await this.configureSteamAPI(apiKey);
-            await this.loadSteamData();
-            this.startAutoUpdate();
-        } catch (error) {
-            console.error('Configuration error:', error);
-            this.showError('Failed to configure Steam API. Please check your API key and Steam ID.');
+    async init() {
+        // Check if we have a valid session token
+        if (this.sessionToken) {
+            try {
+                const isValid = await this.validateSession();
+                if (isValid) {
+                    this.isDemo = false;
+                    this.startUpdates();
+                } else {
+                    this.sessionToken = null;
+                    localStorage.removeItem('steam_session_token');
+                    this.showConfiguration();
+                }
+            } catch (error) {
+                console.error('Session validation error:', error);
+                this.showDemoMode();
+            }
+        } else {
+            this.showConfiguration();
         }
     }
 
-    async useDemo() {
-        this.isDemo = true;
-        this.showLoading();
-        
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        this.playerData = this.demoData;
-        this.displayPlayerData();
-        this.startAutoUpdate();
-    }
-
-    async configureSteamAPI(apiKey) {
+    async validateSession() {
         try {
-            const response = await fetch(`${this.baseUrl}/api/steam/config`, {
+            const response = await fetch(`${this.baseUrl}/api/steam/validate`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ api_key: apiKey })
+                body: JSON.stringify({
+                    session_token: this.sessionToken
+                })
             });
 
-            const result = await response.json();
-            if (!response.ok || result.error) {
-                throw new Error(result.error || 'Failed to configure Steam API');
-            }
-            
-            return result;
+            return response.ok;
         } catch (error) {
-            console.error('Steam API configuration error:', error);
-            throw error;
+            console.error('Session validation error:', error);
+            return false;
         }
     }
 
-    displayPlayerData() {
-        if (!this.playerData) {
-            this.showError('No player data available');
-            return;
-        }
+    showConfiguration() {
+        const widget = document.getElementById('steamStatus');
+        if (!widget) return;
 
-        const { player, games, recent } = this.playerData;
-        const gamesList = games.games || [];
-        const totalPlaytime = gamesList.reduce((total, game) => total + (game.playtime_forever || 0), 0);
-        
-        // Use recent games if available, otherwise fall back to first few owned games
-        const recentGames = (recent && recent.games && recent.games.length > 0) 
-            ? recent.games.slice(0, 3) 
-            : gamesList.slice(0, 3);
-
-        this.container.innerHTML = `
-            <div class="steam-player-info">
-                <img src="${this.getPlayerAvatar(player)}" alt="${player.personaname}" class="steam-avatar">
-                <div class="steam-player-details">
-                    <h4>${player.personaname}</h4>
-                    <div class="steam-player-status ${this.getStatusClass(player.personastate)}">
-                        ${this.getStatusText(player.personastate)}
-                    </div>
+        widget.innerHTML = `
+            <div class="steam-config">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="font-size: 2em; margin-bottom: 10px;">🎮</div>
+                    <h4 style="color: #ffffff; margin: 0;">Connect Your Steam Account</h4>
+                    <p style="color: #c7d5e0; font-size: 0.85em; margin: 5px 0;">Get real-time Steam statistics and gaming data</p>
                 </div>
-            </div>
-
-            <div class="steam-stats">
-                <div class="steam-stat-item">
-                    <span class="steam-stat-label">Games Owned</span>
-                    <span class="steam-stat-value">${games.game_count}</span>
+                
+                <div style="margin-bottom: 15px;">
+                    <label>Steam API Key:</label>
+                    <input type="password" id="steamApiKey" placeholder="Enter your Steam API key" 
+                           style="margin-bottom: 10px;">
+                    
+                    <label>Steam ID:</label>
+                    <input type="text" id="steamId" placeholder="Enter your Steam ID" 
+                           style="margin-bottom: 15px;">
+                    
+                    <button class="steam-connect-btn" onclick="steamWidget.authenticateUser()">
+                        🔐 Connect Steam Account
+                    </button>
+                    
+                    <button class="steam-connect-btn" onclick="steamWidget.showDemoMode()" 
+                            style="margin-top: 10px; background: rgba(255, 255, 255, 0.1); color: #c7d5e0;">
+                        👁️ View Demo Instead
+                    </button>
                 </div>
-                <div class="steam-stat-item">
-                    <span class="steam-stat-label">Total Playtime</span>
-                    <span class="steam-stat-value">${this.formatPlaytime(totalPlaytime)}</span>
-                </div>
-                <div class="steam-stat-item">
-                    <span class="steam-stat-label">Most Played</span>
-                    <span class="steam-stat-value">${this.getMostPlayedGame(gamesList)}</span>
-                </div>
-            </div>
-
-            <div class="steam-recent-games">
-                <h4>Recently Played</h4>
-                ${recentGames.map(game => `
-                    <div class="steam-recent-game" onclick="window.open('steam://rungameid/${game.appid}', '_blank')">
-                        <img src="${this.getGameIcon(game)}" alt="${game.name}" class="steam-game-image">
-                        <div class="steam-game-info">
-                            <div class="steam-game-title">${game.name}</div>
-                            <div class="steam-game-playtime">${this.formatPlaytime(game.playtime_forever)} total</div>
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
-
-            <div class="steam-achievement-progress">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span class="steam-stat-label">Achievement Progress</span>
-                    <span class="steam-stat-value">${this.getAchievementProgress()}%</span>
-                </div>
-                <div class="steam-achievement-bar">
-                    <div class="steam-achievement-fill" style="width: ${this.getAchievementProgress()}%"></div>
+                
+                <div class="steam-help-text">
+                    <h5 style="color: #ffffff; margin: 0 0 10px 0;">🚀 Quick Setup:</h5>
+                    <p style="margin: 5px 0;">• <strong>API Key:</strong> <a href="https://steamcommunity.com/dev/apikey" target="_blank">Get your key here</a></p>
+                    <p style="margin: 5px 0;">• <strong>Steam ID:</strong> <a href="https://steamidfinder.com/" target="_blank">Find your ID here</a></p>
+                    <p style="margin: 10px 0 0 0; font-size: 0.8em; color: #98a8b0;">
+                        🔒 <strong>Security:</strong> Your credentials are encrypted and stored securely server-side.
+                    </p>
                 </div>
             </div>
         `;
     }
 
-    getPlayerAvatar(player) {
-        // Steam avatar URLs or fallback
-        return player.avatarmedium || 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg';
+    showDemoMode() {
+        this.isDemo = true;
+        this.displayPlayerInfo(this.demoData.player);
+        this.displayStats(this.demoData.stats);
+        this.displayRecentGames(this.demoData.recentGames);
+        this.showDemoIndicator();
     }
 
-    getStatusClass(personastate) {
-        return personastate === 1 ? 'steam-status-online' : 'steam-status-offline';
+    showDemoIndicator() {
+        const widget = document.getElementById('steamStatus');
+        if (!widget) return;
+
+        // Add demo indicator
+        const demoIndicator = document.createElement('div');
+        demoIndicator.style.cssText = `
+            background: linear-gradient(135deg, #ff6b6b, #ffa500);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.8em;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        `;
+        demoIndicator.innerHTML = '🎭 Demo Mode - <a href="#" onclick="steamWidget.showConfiguration()" style="color: white; text-decoration: underline;">Connect Real Account</a>';
+        widget.insertBefore(demoIndicator, widget.firstChild);
     }
 
-    getStatusText(personastate) {
-        const statusMap = {
-            0: 'Offline',
-            1: 'Online',
-            2: 'Busy',
-            3: 'Away',
-            4: 'Snooze',
-            5: 'Looking to trade',
-            6: 'Looking to play'
-        };
-        return statusMap[personastate] || 'Unknown';
-    }
+    async authenticateUser() {
+        const apiKey = document.getElementById('steamApiKey').value.trim();
+        const steamId = document.getElementById('steamId').value.trim();
 
-    formatPlaytime(minutes) {
-        if (minutes < 60) {
-            return `${minutes}m`;
-        } else if (minutes < 1440) {
-            const hours = Math.floor(minutes / 60);
-            const mins = minutes % 60;
-            return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
-        } else {
-            const hours = Math.floor(minutes / 60);
-            const days = Math.floor(hours / 24);
-            const remainingHours = hours % 24;
-            return remainingHours > 0 ? `${days}d ${remainingHours}h` : `${days}d`;
-        }
-    }
-
-    getMostPlayedGame(games) {
-        if (!games || games.length === 0) return 'None';
-        const mostPlayed = games.reduce((prev, current) => 
-            prev.playtime_forever > current.playtime_forever ? prev : current
-        );
-        return mostPlayed.name;
-    }
-
-    getGameIcon(game) {
-        // Steam game icon URLs or fallback
-        return game.img_icon_url 
-            ? `https://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_icon_url}.jpg`
-            : 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/default_icon.jpg';
-    }
-
-    getAchievementProgress() {
-        // Simulated achievement progress
-        return Math.floor(Math.random() * 40) + 60; // Random between 60-100%
-    }
-
-    startAutoUpdate() {
-        // Update every 5 minutes
-        this.updateInterval = setInterval(async () => {
-            try {
-                if (this.isDemo) {
-                    // Update demo data slightly for realism
-                    this.updateDemoData();
-                    this.displayPlayerData();
-                } else {
-                    await this.loadSteamData();
-                }
-            } catch (error) {
-                console.error('Auto-update failed:', error);
-                // Don't show error for auto-updates, just log it
-            }
-        }, 300000); // 5 minutes
-    }
-
-    updateDemoData() {
-        // Simulate small changes in demo data
-        const now = Date.now() / 1000;
-        this.demoData.games.games.forEach(game => {
-            if (Math.random() < 0.3) { // 30% chance to update playtime
-                game.playtime_forever += Math.floor(Math.random() * 5) + 1;
-            }
-        });
-    }
-
-    async loadSteamData() {
-        if (this.isDemo) {
-            // Use demo data
-            this.playerData = this.demoData;
-            this.displayPlayerData();
+        if (!apiKey || !steamId) {
+            this.showError('Please enter both Steam API Key and Steam ID');
             return;
         }
 
-        if (!this.steamId) {
-            throw new Error('Steam ID not configured');
-        }
+        // Show loading state
+        const widget = document.getElementById('steamStatus');
+        widget.innerHTML = `
+            <div class="steam-loading">
+                <div class="loading-spinner"></div>
+                <p>🔐 Authenticating with Steam...</p>
+                <p style="font-size: 0.8em; color: #98a8b0;">This may take a moment</p>
+            </div>
+        `;
 
         try {
-            // Fetch player profile
-            const playerResponse = await fetch(`${this.baseUrl}/api/steam/player?steamid=${this.steamId}`);
-            const playerData = await playerResponse.json();
-            
-            if (playerData.error) {
-                throw new Error(playerData.error);
+            // Send credentials to server for secure authentication
+            const response = await fetch(`${this.baseUrl}/api/steam/authenticate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    api_key: apiKey,
+                    steam_id: steamId
+                })
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.session_token) {
+                // Store only the secure session token
+                this.sessionToken = result.session_token;
+                localStorage.setItem('steam_session_token', this.sessionToken);
+                
+                this.isDemo = false;
+                this.startUpdates();
+                
+                // Show success message
+                this.showSuccess('✅ Successfully connected to Steam!');
+                
+            } else {
+                this.showError(result.error || 'Authentication failed. Please check your credentials.');
+            }
+        } catch (error) {
+            console.error('Steam authentication error:', error);
+            this.showError('Connection failed. Please try again.');
+        }
+    }
+
+    async startUpdates() {
+        await this.updateSteamData();
+        
+        // Set up automatic updates every 5 minutes
+        setInterval(async () => {
+            await this.updateSteamData();
+        }, 300000);
+    }
+
+    async updateSteamData() {
+        if (this.isDemo) return;
+
+        try {
+            const response = await fetch(`${this.baseUrl}/api/steam/user-data`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    session_token: this.sessionToken
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch Steam data');
             }
 
-            // Fetch owned games
-            const gamesResponse = await fetch(`${this.baseUrl}/api/steam/games?steamid=${this.steamId}`);
-            const gamesData = await gamesResponse.json();
+            const steamData = await response.json();
             
-            if (gamesData.error) {
-                throw new Error(gamesData.error);
+            if (steamData.player) {
+                this.displayPlayerInfo(steamData.player);
             }
-
-            // Fetch recent games
-            const recentResponse = await fetch(`${this.baseUrl}/api/steam/recent?steamid=${this.steamId}&count=5`);
-            const recentData = await recentResponse.json();
             
-            if (recentData.error) {
-                console.warn('Failed to load recent games:', recentData.error);
-                // Don't throw error for recent games, just use empty data
+            if (steamData.stats) {
+                this.displayStats(steamData.stats);
             }
-
-            // Structure the data similar to demo format
-            this.playerData = {
-                player: playerData.response?.players?.[0] || {},
-                games: gamesData.response || { game_count: 0, games: [] },
-                recent: recentData.response || { games: [] }
-            };
-
-            this.displayPlayerData();
+            
+            if (steamData.recentGames) {
+                this.displayRecentGames(steamData.recentGames);
+            }
 
         } catch (error) {
-            console.error('Failed to load Steam data:', error);
-            throw error;
+            console.error('Error updating Steam data:', error);
+            this.showError('Failed to update Steam data');
         }
     }
 
-    destroy() {
-        if (this.updateInterval) {
-            clearInterval(this.updateInterval);
+    displayPlayerInfo(player) {
+        const widget = document.getElementById('steamStatus');
+        if (!widget) return;
+
+        const statusMap = {
+            0: { text: "Offline", class: "steam-status-offline" },
+            1: { text: "Online", class: "steam-status-online" },
+            2: { text: "Busy", class: "steam-status-online" },
+            3: { text: "Away", class: "steam-status-offline" },
+            4: { text: "Snooze", class: "steam-status-offline" },
+            5: { text: "Looking to trade", class: "steam-status-online" },
+            6: { text: "Looking to play", class: "steam-status-online" }
+        };
+
+        const status = statusMap[player.personastate] || statusMap[0];
+
+        widget.innerHTML = `
+            <div class="steam-player-info">
+                <img src="${player.avatarfull}" alt="${player.personaname}" class="steam-avatar">
+                <div class="steam-player-details">
+                    <h4>${player.personaname}</h4>
+                    <div class="steam-player-status ${status.class}">
+                        ${status.text}
+                    </div>
+                </div>
+            </div>
+            <div id="steamStats"></div>
+            <div id="recentGames"></div>
+        `;
+    }
+
+    displayStats(stats) {
+        const statsContainer = document.getElementById('steamStats');
+        if (!statsContainer) return;
+
+        statsContainer.innerHTML = `
+            <div class="steam-stats">
+                <div class="steam-stat-item">
+                    <span class="steam-stat-label">Total Games</span>
+                    <span class="steam-stat-value">${stats.total_games}</span>
+                </div>
+                <div class="steam-stat-item">
+                    <span class="steam-stat-label">Total Playtime</span>
+                    <span class="steam-stat-value">${stats.total_playtime}</span>
+                </div>
+                <div class="steam-stat-item">
+                    <span class="steam-stat-label">Most Played</span>
+                    <span class="steam-stat-value">${stats.most_played}</span>
+                </div>
+            </div>
+        `;
+    }
+
+    displayRecentGames(games) {
+        const recentContainer = document.getElementById('recentGames');
+        if (!recentContainer) return;
+
+        const gamesList = games.map(game => {
+            const playtimeHours = Math.floor(game.playtime_forever / 60);
+            const playtimeMinutes = game.playtime_forever % 60;
+            const playtimeText = playtimeHours > 0 ? `${playtimeHours}h ${playtimeMinutes}m` : `${playtimeMinutes}m`;
+            
+            return `
+                <div class="steam-recent-game" onclick="steamWidget.launchGame(${game.appid})">
+                    <img src="${game.img_icon_url}" alt="${game.name}" class="steam-game-image">
+                    <div class="steam-game-info">
+                        <div class="steam-game-title">${game.name}</div>
+                        <div class="steam-game-playtime">${playtimeText}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        recentContainer.innerHTML = `
+            <div class="steam-recent-games">
+                <h4>🎮 Recently Played</h4>
+                ${gamesList}
+            </div>
+        `;
+    }
+
+    launchGame(appId) {
+        if (this.isDemo) {
+            this.showInfo('Demo mode - Game launching not available');
+            return;
         }
+        
+        // Open Steam game
+        window.open(`steam://rungameid/${appId}`, '_blank');
+    }
+
+    showError(message) {
+        const widget = document.getElementById('steamStatus');
+        if (!widget) return;
+
+        widget.innerHTML = `
+            <div class="steam-error">
+                <div class="steam-error-icon">⚠️</div>
+                <p>${message}</p>
+                <button class="steam-connect-btn" onclick="steamWidget.showConfiguration()" style="margin-top: 15px;">
+                    Try Again
+                </button>
+            </div>
+        `;
+    }
+
+    showSuccess(message) {
+        const widget = document.getElementById('steamStatus');
+        if (!widget) return;
+
+        widget.innerHTML = `
+            <div style="text-align: center; padding: 20px; color: #4caf50;">
+                <div style="font-size: 2em; margin-bottom: 10px;">✅</div>
+                <p>${message}</p>
+            </div>
+        `;
+
+        // Clear success message after 3 seconds
+        setTimeout(() => {
+            this.updateSteamData();
+        }, 3000);
+    }
+
+    showInfo(message) {
+        const widget = document.getElementById('steamStatus');
+        if (!widget) return;
+
+        const infoDiv = document.createElement('div');
+        infoDiv.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #66c0f4, #57cbde);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            font-size: 0.9em;
+            font-weight: 600;
+        `;
+        infoDiv.textContent = message;
+        document.body.appendChild(infoDiv);
+
+        setTimeout(() => {
+            infoDiv.remove();
+        }, 3000);
+    }
+
+    disconnect() {
+        this.sessionToken = null;
+        localStorage.removeItem('steam_session_token');
+        this.isDemo = true;
+        this.showConfiguration();
     }
 }
 
-// Initialize Steam Widget
-let steamWidget;
-
-function initializeSteamWidget() {
-    steamWidget = new SteamWidget();
-    steamWidget.initialize();
-}
+// Initialize Steam Widget when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    if (document.getElementById('steamStatus')) {
+        window.steamWidget = new SteamWidget();
+    }
+});
 
 // Clean up when page is unloaded
 window.addEventListener('beforeunload', function() {
-    if (steamWidget) {
-        steamWidget.destroy();
+    if (window.steamWidget) {
+        window.steamWidget.disconnect();
     }
 });
