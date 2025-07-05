@@ -1,204 +1,139 @@
-# Steam Status Bar
+# GamePedia Project
 
-A cross-platform desktop application that displays your Steam gaming statistics in a convenient status bar widget.
+A comprehensive gaming encyclopedia and Steam integration platform.
 
 ## Features
 
-### 📊 Gaming Statistics
-- **Total Games**: See how many games you own
-- **Total Playtime**: View your cumulative gaming hours across all games
-- **Most Played Game**: Discover which game you've spent the most time playing
-- **Player Status**: Shows your current Steam status (Online, Offline, Away, etc.)
+- **Game Database**: Comprehensive collection of game information
+- **Advanced Search**: Search by title, developer, genre, platform, and more
+- **Steam Integration**: Real-time Steam status and gaming statistics
+- **Responsive Design**: Works on desktop and mobile devices
+- **Game Pages**: Detailed information about individual games
 
-### 🎮 Recently Played Games
-- View your recently played games in a neat table
-- See playtime for each game
-- Check when you last played each game
-- Double-click any game to launch it directly in Steam
+## Steam Integration
 
-### ⚙️ Configurable Settings
-- Customizable update intervals
-- Adjustable number of recent games to display
-- Persistent configuration storage
-- Always-on-top window option
+The project includes a Steam Status Bar widget that displays:
+- Player profile information and online status
+- Gaming statistics (total games, playtime, most played)
+- Recently played games with icons and playtime
+- Achievement progress visualization
+- Real-time updates every 5 minutes
 
-### 🔗 Steam Integration
-- Uses official Steam Web API
-- Direct Steam game launching
-- Real-time status updates
-- Secure API key storage
+### Steam Widget Features
 
-## Screenshots
+- **Player Info**: Shows Steam avatar, username, and online status
+- **Gaming Stats**: Displays total games owned, total playtime, and most played game
+- **Recent Games**: Shows last 3 played games with icons and playtime
+- **Achievement Progress**: Visual progress bar for achievements
+- **Interactive Elements**: Click on games to launch them in Steam
 
-The application features a clean, tabbed interface with three main sections:
-- **Status Tab**: Shows your player info and gaming statistics
-- **Games Tab**: Displays recently played games in a sortable table
-- **Settings Tab**: Configure API keys and display preferences
+### Real Steam API Integration
 
-## Prerequisites
+The Steam widget now supports real Steam API integration! You can use either demo mode or connect your actual Steam account.
 
-- Python 3.7 or higher
-- Steam account
-- Steam Web API key (free to obtain)
+#### Quick Setup (Real Steam Data):
 
-## Installation
+1. **Get Steam API Key**: Visit https://steamcommunity.com/dev/apikey
+2. **Find Your Steam ID**: Use https://steamidfinder.com/
+3. **Launch with API Support**: Run `python3 launch.py` (now includes built-in Steam API proxy)
+4. **Configure**: Enter your API key and Steam ID in the widget settings
+5. **Enjoy**: Real-time Steam data with live updates!
 
-1. **Clone or download this repository**
-   ```bash
-   git clone <repository-url>
-   cd steam-status-bar
-   ```
+#### Demo Mode:
 
-2. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
+For testing without Steam API setup, the widget provides a demo mode with realistic sample data.
 
-3. **Run the application**
-   ```bash
-   python steam_status_bar.py
-   ```
+## File Structure
 
-## Setup Guide
-
-### Step 1: Get Your Steam API Key
-
-1. Go to [Steam Web API Key page](https://steamcommunity.com/dev/apikey)
-2. Log in with your Steam account
-3. Fill in the domain field (you can use `localhost` for personal use)
-4. Click "Register" to get your API key
-5. **Important**: Keep this key private and don't share it
-
-### Step 2: Find Your Steam ID
-
-1. Visit [SteamID Finder](https://steamidfinder.com/)
-2. Enter your Steam profile URL or username
-3. Copy your "steamID64" (it's a long number like `76561198000000000`)
-
-### Step 3: Configure the Application
-
-1. Open the Steam Status Bar application
-2. Go to the "Settings" tab
-3. Enter your Steam API Key in the first field
-4. Enter your Steam ID in the second field
-5. Adjust other settings as desired:
-   - **Update Interval**: How often to refresh data (default: 300 seconds)
-   - **Max Recent Games**: Number of recent games to display (default: 5)
-6. Click "Save Settings"
-
-The application will automatically start fetching your Steam data!
-
-## Usage
-
-### Main Interface
-
-- **Status Tab**: View your current Steam status and overall gaming statistics
-- **Games Tab**: Browse your recently played games and launch them directly
-- **Settings Tab**: Configure API settings and display preferences
-
-### Features
-
-- **Auto-refresh**: The application automatically updates your data based on the configured interval
-- **Manual refresh**: Click "Update Now" to immediately fetch the latest data
-- **Game launching**: Double-click any game in the "Games" tab to open it in Steam
-- **Always on top**: The window stays on top of other applications for easy monitoring
-
-### Status Bar
-
-The bottom status bar shows:
-- "Ready" when the application is idle
-- "Fetching Steam data..." when updating
-- "Last updated: HH:MM:SS" after successful updates
-- Error messages if something goes wrong
-
-## Configuration
-
-The application stores its configuration in `steam_status_config.ini`. You can edit this file directly if needed:
-
-```ini
-[Steam]
-steam_api_key = your_api_key_here
-steam_id = your_steam_id_here
-update_interval = 300
-show_achievements = True
-max_recent_games = 5
+```
+gamepedia/
+├── index.html          # Main webpage
+├── style.css           # Styling including Steam widget styles
+├── script.js           # Main JavaScript with Steam widget functionality
+├── js/
+│   └── router.js       # Page routing
+├── css/
+│   └── game-page.css   # Game page specific styles
+├── data/
+│   └── games.json      # Game database
+└── games/
+    └── [game-pages]    # Individual game pages
 ```
 
-## Troubleshooting
+## Setup
+
+### Option 1: With Real Steam API (Recommended)
+1. **Install dependencies**: `sudo apt install python3-requests` (or equivalent)
+2. **Run the server**: `python3 launch.py`
+3. **Browser opens automatically** with Steam API support
+4. **Configure Steam**: Enter your API key and Steam ID in the widget
+
+### Option 2: Demo Mode Only
+1. Clone the repository
+2. Open `gamepedia/index.html` in a web browser
+3. The Steam widget will show demo data
+
+## Troubleshooting Steam API
+
+### Testing Your Steam API Configuration
+```bash
+# Test your Steam API credentials first
+python3 test_steam_integration.py YOUR_API_KEY YOUR_STEAM_ID
+```
 
 ### Common Issues
-
-1. **"Error getting owned games"**
-   - Check that your API key is correct
-   - Verify your Steam ID is the correct 64-bit format
-   - Ensure your Steam profile is public
-
-2. **"No data displaying"**
-   - Make sure you've entered both API key and Steam ID
-   - Check your internet connection
-   - Verify your Steam profile privacy settings
-
-3. **"Games not launching"**
-   - Ensure Steam is installed and running
-   - Check that the Steam browser protocol is enabled
+- **"Steam API key not configured"**: Make sure you entered the API key correctly
+- **"Steam ID required"**: Verify your Steam ID is a 17-digit number
+- **"No player data found"**: Check that your Steam profile is set to public
+- **"Permission denied"**: Your API key might be invalid or expired
 
 ### Steam Profile Privacy
+Your Steam profile must be public for the API to work:
+1. Go to your Steam profile → Edit Profile → Privacy Settings
+2. Set "Game details" to "Public"
+3. Set "Game details" to "Public" (yes, this is important!)
 
-For the application to work properly, your Steam profile must be set to "Public" or "Friends Only" with game details visible. To check this:
+## Steam API Integration
 
-1. Go to your Steam profile
-2. Click "Edit Profile"
-3. Go to "Privacy Settings"
-4. Set "Game details" to "Public" or "Friends Only"
+For production use with real Steam data:
 
-## API Rate Limits
+1. **Backend Setup**: Create a server-side proxy to handle Steam API requests
+2. **API Configuration**: Add your Steam API key and Steam ID
+3. **CORS Handling**: Steam API doesn't allow direct browser requests due to CORS policy
+4. **Rate Limiting**: Implement proper rate limiting for Steam API calls
 
-The Steam Web API has rate limits. The application is designed to:
-- Cache data to minimize API calls
-- Use reasonable default update intervals (5 minutes)
-- Handle rate limiting gracefully
+### Example Backend Proxy (Node.js)
 
-## Privacy & Security
+```javascript
+const express = require('express');
+const axios = require('axios');
+const app = express();
 
-- Your API key is stored locally on your computer
-- The application only makes requests to official Steam API endpoints
-- No personal data is transmitted to third parties
-- API key is masked in the settings interface
+app.get('/api/steam/player/:steamid', async (req, res) => {
+  try {
+    const response = await axios.get(`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${API_KEY}&steamids=${req.params.steamid}`);
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch Steam data' });
+  }
+});
+```
 
-## Platform Support
+## Styling
 
-This application is cross-platform and works on:
-- Windows 10/11
-- macOS 10.14+
-- Linux (Ubuntu, Debian, Fedora, etc.)
+The Steam widget uses Steam's official color scheme:
+- Primary: #66c0f4 (Steam blue)
+- Secondary: #1b2838 (Steam dark blue)
+- Background: #2a475e (Steam gray)
+- Text: #c7d5e0 (Steam light gray)
 
-## Dependencies
+## Browser Support
 
-- `requests`: For HTTP API calls to Steam
-- `tkinter`: GUI framework (included with Python)
-- `threading`: For background updates
-- `configparser`: For configuration management
-
-## Contributing
-
-Feel free to submit issues and enhancement requests! Some ideas for future features:
-
-- Achievement tracking and statistics
-- Friends list and activity
-- Game price tracking
-- Steam inventory display
-- Custom themes and styling
-- System tray integration
-- Notification system
+- Chrome 60+
+- Firefox 55+
+- Safari 12+
+- Edge 79+
 
 ## License
 
-This project is open source and available under the MIT License.
-
-## Disclaimer
-
-This application is not affiliated with or endorsed by Valve Corporation or Steam. Steam is a trademark of Valve Corporation.
-
----
-
-**Enjoy tracking your Steam gaming statistics!** 🎮
+This project is licensed under the MIT License - see the LICENSE file for details.

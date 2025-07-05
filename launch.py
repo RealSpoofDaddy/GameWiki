@@ -1,85 +1,48 @@
 #!/usr/bin/env python3
 """
-Steam Status Bar Launcher
-Simple launcher script that handles dependencies and starts the application
+Launch script for the GamePedia website with Steam integration
 """
 
 import sys
 import subprocess
-import os
 from pathlib import Path
 
-def check_python_version():
-    """Check if Python version is adequate"""
-    if sys.version_info < (3, 7):
-        print("❌ Python 3.7 or higher is required.")
-        print(f"   Current version: {sys.version}")
-        return False
-    return True
-
-def install_dependencies():
-    """Install required dependencies"""
-    print("📦 Installing dependencies...")
-    try:
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
-        print("✅ Dependencies installed successfully!")
-        return True
-    except subprocess.CalledProcessError as e:
-        print(f"❌ Failed to install dependencies: {e}")
-        return False
-    except FileNotFoundError:
-        print("❌ requirements.txt not found. Please make sure it exists in the same directory.")
-        return False
-
-def check_dependencies():
-    """Check if required dependencies are installed"""
-    try:
-        import requests
-        return True
-    except ImportError:
-        print("📦 Missing dependencies detected.")
-        response = input("Install dependencies now? (y/n): ").lower().strip()
-        if response in ['y', 'yes']:
-            return install_dependencies()
-        else:
-            print("❌ Cannot run without dependencies.")
-            return False
-
-def launch_application():
-    """Launch the Steam Status Bar application"""
-    print("🚀 Starting Steam Status Bar...")
-    try:
-        # Import and run the main application
-        from steam_status_bar import main
-        main()
-    except ImportError as e:
-        print(f"❌ Failed to import application: {e}")
-        print("   Make sure steam_status_bar.py is in the same directory.")
-        return False
-    except Exception as e:
-        print(f"❌ Application error: {e}")
-        return False
-    
-    return True
-
 def main():
-    """Main launcher function"""
-    print("🎮 Steam Status Bar Launcher")
-    print("=" * 30)
+    """Main function"""
+    print("🎮 GamePedia + Steam API Launcher")
+    print("=" * 50)
     
-    # Check Python version
-    if not check_python_version():
+    # Check if the steam proxy server exists
+    steam_proxy_path = Path(__file__).parent / 'steam_proxy_server.py'
+    
+    if not steam_proxy_path.exists():
+        print("❌ Error: steam_proxy_server.py not found!")
+        print("Please make sure you're running this script from the project root directory.")
         sys.exit(1)
     
-    # Check and install dependencies
-    if not check_dependencies():
+    try:
+        print("🚀 Starting GamePedia with Steam API support...")
+        print("� This includes a built-in Steam API proxy for real Steam data!")
+        print("\n" + "⚡ Features:")
+        print("✅ Real Steam API Integration")
+        print("✅ Steam Profile Configuration")
+        print("✅ Live Steam Data Updates")
+        print("✅ Demo Mode Available")
+        print("✅ Full CORS Support")
+        print("\n" + "🌐 The browser will open automatically...")
+        print("❌ Press Ctrl+C in the server window to stop\n")
+        
+        # Run the steam proxy server
+        subprocess.run([sys.executable, str(steam_proxy_path)])
+        
+    except KeyboardInterrupt:
+        print("\n🛑 Launcher stopped by user")
+    except FileNotFoundError:
+        print("❌ Error: Python not found. Please make sure Python is installed.")
         sys.exit(1)
-    
-    # Launch the application
-    if not launch_application():
+    except Exception as e:
+        print(f"❌ Error launching server: {e}")
         sys.exit(1)
-    
-    print("👋 Steam Status Bar closed.")
 
 if __name__ == "__main__":
     main()
