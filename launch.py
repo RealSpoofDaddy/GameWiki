@@ -1,85 +1,95 @@
 #!/usr/bin/env python3
 """
-Steam Status Bar Launcher
-Simple launcher script that handles dependencies and starts the application
+Launch script for the GamePedia website with Steam integration
 """
 
-import sys
-import subprocess
+import http.server
+import socketserver
+import webbrowser
 import os
+import sys
+import threading
+import time
 from pathlib import Path
 
-def check_python_version():
-    """Check if Python version is adequate"""
-    if sys.version_info < (3, 7):
-        print("❌ Python 3.7 or higher is required.")
-        print(f"   Current version: {sys.version}")
-        return False
-    return True
+def get_free_port():
+    """Find a free port to use for the server"""
+    import socket
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind(('', 0))
+        s.listen(1)
+        port = s.getsockname()[1]
+    return port
 
-def install_dependencies():
-    """Install required dependencies"""
-    print("📦 Installing dependencies...")
-    try:
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
-        print("✅ Dependencies installed successfully!")
-        return True
-    except subprocess.CalledProcessError as e:
-        print(f"❌ Failed to install dependencies: {e}")
-        return False
-    except FileNotFoundError:
-        print("❌ requirements.txt not found. Please make sure it exists in the same directory.")
-        return False
-
-def check_dependencies():
-    """Check if required dependencies are installed"""
-    try:
-        import requests
-        return True
-    except ImportError:
-        print("📦 Missing dependencies detected.")
-        response = input("Install dependencies now? (y/n): ").lower().strip()
-        if response in ['y', 'yes']:
-            return install_dependencies()
-        else:
-            print("❌ Cannot run without dependencies.")
-            return False
-
-def launch_application():
-    """Launch the Steam Status Bar application"""
-    print("🚀 Starting Steam Status Bar...")
-    try:
-        # Import and run the main application
-        from steam_status_bar import main
-        main()
-    except ImportError as e:
-        print(f"❌ Failed to import application: {e}")
-        print("   Make sure steam_status_bar.py is in the same directory.")
-        return False
-    except Exception as e:
-        print(f"❌ Application error: {e}")
+def serve_website():
+    """Serve the GamePedia website locally"""
+    # Change to the gamepedia directory
+    gamepedia_dir = Path(__file__).parent / 'gamepedia'
+    
+    if not gamepedia_dir.exists():
+        print("Error: gamepedia directory not found!")
+        print("Please make sure you're running this script from the project root directory.")
         return False
     
-    return True
+    os.chdir(gamepedia_dir)
+    
+    # Find a free port
+    port = get_free_port()
+    
+    # Create HTTP server
+    class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
+        def end_headers(self):
+            # Add CORS headers for local development
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+            self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+            super().end_headers()
+    
+    try:
+        with socketserver.TCPServer(("", port), CustomHTTPRequestHandler) as httpd:
+            url = f"http://localhost:{port}"
+            print(f"� GamePedia Server Starting...")
+            print(f"📱 Website URL: {url}")
+            print(f"🎮 Steam Integration: Active (Demo Mode)")
+            print(f"📁 Serving from: {gamepedia_dir}")
+            print(f"🔧 Port: {port}")
+            print("\n" + "="*50)
+            print("🎯 FEATURES INCLUDED:")
+            print("✅ Game Database with Search")
+            print("✅ Steam Status Bar Widget")
+            print("✅ Player Profile & Statistics")
+            print("✅ Recently Played Games")
+            print("✅ Achievement Progress")
+            print("✅ Responsive Design")
+            print("="*50)
+            print(f"\n🌐 Opening browser to {url}")
+            print("❌ Press Ctrl+C to stop the server")
+            
+            # Open browser after a short delay
+            def open_browser():
+                time.sleep(1)
+                webbrowser.open(url)
+            
+            threading.Thread(target=open_browser, daemon=True).start()
+            
+            # Start server
+            httpd.serve_forever()
+            
+    except KeyboardInterrupt:
+        print("\n\n🛑 Server stopped by user")
+        return True
+    except Exception as e:
+        print(f"❌ Error starting server: {e}")
+        return False
 
 def main():
-    """Main launcher function"""
-    print("🎮 Steam Status Bar Launcher")
-    print("=" * 30)
+    """Main function"""
+    print("🎮 GamePedia Launcher")
+    print("=" * 40)
     
-    # Check Python version
-    if not check_python_version():
+    if not serve_website():
+        print("❌ Failed to start the website")
         sys.exit(1)
-    
-    # Check and install dependencies
-    if not check_dependencies():
-        sys.exit(1)
-    
-    # Launch the application
-    if not launch_application():
-        sys.exit(1)
-    
-    print("👋 Steam Status Bar closed.")
 
 if __name__ == "__main__":
     main()

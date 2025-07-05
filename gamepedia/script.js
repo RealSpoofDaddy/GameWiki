@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     displayRecentGames();
     updateStatistics();
     displayRecentlyViewed();
+    initializeSteamWidget();
 });
 
 // Load games database
@@ -605,3 +606,300 @@ window.showIndieGames = showIndieGames;
 window.showMultiplayerGames = showMultiplayerGames;
 window.addToRecentlyViewed = addToRecentlyViewed;
 window.applyFilters = applyFilters;
+
+// Steam Widget Functionality
+class SteamWidget {
+    constructor() {
+        this.container = document.getElementById('steamStatus');
+        this.playerData = null;
+        this.isDemo = true; // Set to false when using real Steam API
+        this.demoData = this.generateDemoData();
+        this.updateInterval = null;
+    }
+
+    generateDemoData() {
+        return {
+            player: {
+                steamid: "76561198123456789",
+                personaname: "GameMaster2024",
+                profileurl: "https://steamcommunity.com/profiles/76561198123456789/",
+                avatar: "https://avatars.steamstatic.com/b2c3e5b2c3e5b2c3e5b2c3e5b2c3e5b2c3e5b2_full.jpg",
+                avatarmedium: "https://avatars.steamstatic.com/b2c3e5b2c3e5b2c3e5b2c3e5b2c3e5b2c3e5b2_medium.jpg",
+                avatarfull: "https://avatars.steamstatic.com/b2c3e5b2c3e5b2c3e5b2c3e5b2c3e5b2c3e5b2_full.jpg",
+                personastate: 1, // 1 = online
+                realname: "John Doe",
+                primaryclanid: "103582791429521408",
+                timecreated: 1234567890,
+                personastateflags: 0,
+                loccountrycode: "US"
+            },
+            games: {
+                game_count: 247,
+                games: [
+                    {
+                        appid: 730,
+                        name: "Counter-Strike 2",
+                        playtime_forever: 1547,
+                        img_icon_url: "69f7ebe2735c7c6c_icon.jpg",
+                        playtime_windows_forever: 1547,
+                        playtime_mac_forever: 0,
+                        playtime_linux_forever: 0,
+                        rtime_last_played: Date.now() / 1000 - 3600 // 1 hour ago
+                    },
+                    {
+                        appid: 1172470,
+                        name: "Apex Legends",
+                        playtime_forever: 892,
+                        img_icon_url: "apollo_icon.jpg",
+                        playtime_windows_forever: 892,
+                        playtime_mac_forever: 0,
+                        playtime_linux_forever: 0,
+                        rtime_last_played: Date.now() / 1000 - 7200 // 2 hours ago
+                    },
+                    {
+                        appid: 292030,
+                        name: "The Witcher 3: Wild Hunt",
+                        playtime_forever: 2156,
+                        img_icon_url: "witcher3_icon.jpg",
+                        playtime_windows_forever: 2156,
+                        playtime_mac_forever: 0,
+                        playtime_linux_forever: 0,
+                        rtime_last_played: Date.now() / 1000 - 86400 // 1 day ago
+                    },
+                    {
+                        appid: 271590,
+                        name: "Grand Theft Auto V",
+                        playtime_forever: 756,
+                        img_icon_url: "gta5_icon.jpg",
+                        playtime_windows_forever: 756,
+                        playtime_mac_forever: 0,
+                        playtime_linux_forever: 0,
+                        rtime_last_played: Date.now() / 1000 - 172800 // 2 days ago
+                    },
+                    {
+                        appid: 1091500,
+                        name: "Cyberpunk 2077",
+                        playtime_forever: 423,
+                        img_icon_url: "cyberpunk_icon.jpg",
+                        playtime_windows_forever: 423,
+                        playtime_mac_forever: 0,
+                        playtime_linux_forever: 0,
+                        rtime_last_played: Date.now() / 1000 - 259200 // 3 days ago
+                    }
+                ]
+            }
+        };
+    }
+
+    async initialize() {
+        try {
+            this.showLoading();
+            
+            if (this.isDemo) {
+                // Simulate API delay
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                this.playerData = this.demoData;
+                this.displayPlayerData();
+            } else {
+                // Real Steam API integration would go here
+                await this.loadSteamData();
+            }
+            
+            // Set up automatic updates
+            this.startAutoUpdate();
+            
+        } catch (error) {
+            console.error('Error initializing Steam widget:', error);
+            this.showError('Failed to load Steam data');
+        }
+    }
+
+    showLoading() {
+        this.container.innerHTML = `
+            <div class="steam-loading">
+                <div class="loading-spinner"></div>
+                <p>Loading Steam data...</p>
+            </div>
+        `;
+    }
+
+    showError(message) {
+        this.container.innerHTML = `
+            <div class="steam-error">
+                <div class="steam-error-icon">⚠️</div>
+                <p>${message}</p>
+                <button class="steam-connect-btn" onclick="steamWidget.initialize()">
+                    Retry Connection
+                </button>
+            </div>
+        `;
+    }
+
+    displayPlayerData() {
+        if (!this.playerData) {
+            this.showError('No player data available');
+            return;
+        }
+
+        const { player, games } = this.playerData;
+        const totalPlaytime = games.games.reduce((total, game) => total + game.playtime_forever, 0);
+        const recentGames = games.games.slice(0, 3);
+
+        this.container.innerHTML = `
+            <div class="steam-player-info">
+                <img src="${this.getPlayerAvatar(player)}" alt="${player.personaname}" class="steam-avatar">
+                <div class="steam-player-details">
+                    <h4>${player.personaname}</h4>
+                    <div class="steam-player-status ${this.getStatusClass(player.personastate)}">
+                        ${this.getStatusText(player.personastate)}
+                    </div>
+                </div>
+            </div>
+
+            <div class="steam-stats">
+                <div class="steam-stat-item">
+                    <span class="steam-stat-label">Games Owned</span>
+                    <span class="steam-stat-value">${games.game_count}</span>
+                </div>
+                <div class="steam-stat-item">
+                    <span class="steam-stat-label">Total Playtime</span>
+                    <span class="steam-stat-value">${this.formatPlaytime(totalPlaytime)}</span>
+                </div>
+                <div class="steam-stat-item">
+                    <span class="steam-stat-label">Most Played</span>
+                    <span class="steam-stat-value">${this.getMostPlayedGame(games.games)}</span>
+                </div>
+            </div>
+
+            <div class="steam-recent-games">
+                <h4>Recently Played</h4>
+                ${recentGames.map(game => `
+                    <div class="steam-recent-game" onclick="window.open('steam://rungameid/${game.appid}', '_blank')">
+                        <img src="${this.getGameIcon(game)}" alt="${game.name}" class="steam-game-image">
+                        <div class="steam-game-info">
+                            <div class="steam-game-title">${game.name}</div>
+                            <div class="steam-game-playtime">${this.formatPlaytime(game.playtime_forever)} total</div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+
+            <div class="steam-achievement-progress">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span class="steam-stat-label">Achievement Progress</span>
+                    <span class="steam-stat-value">${this.getAchievementProgress()}%</span>
+                </div>
+                <div class="steam-achievement-bar">
+                    <div class="steam-achievement-fill" style="width: ${this.getAchievementProgress()}%"></div>
+                </div>
+            </div>
+        `;
+    }
+
+    getPlayerAvatar(player) {
+        // Steam avatar URLs or fallback
+        return player.avatarmedium || 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg';
+    }
+
+    getStatusClass(personastate) {
+        return personastate === 1 ? 'steam-status-online' : 'steam-status-offline';
+    }
+
+    getStatusText(personastate) {
+        const statusMap = {
+            0: 'Offline',
+            1: 'Online',
+            2: 'Busy',
+            3: 'Away',
+            4: 'Snooze',
+            5: 'Looking to trade',
+            6: 'Looking to play'
+        };
+        return statusMap[personastate] || 'Unknown';
+    }
+
+    formatPlaytime(minutes) {
+        if (minutes < 60) {
+            return `${minutes}m`;
+        } else if (minutes < 1440) {
+            const hours = Math.floor(minutes / 60);
+            const mins = minutes % 60;
+            return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
+        } else {
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+            const remainingHours = hours % 24;
+            return remainingHours > 0 ? `${days}d ${remainingHours}h` : `${days}d`;
+        }
+    }
+
+    getMostPlayedGame(games) {
+        if (!games || games.length === 0) return 'None';
+        const mostPlayed = games.reduce((prev, current) => 
+            prev.playtime_forever > current.playtime_forever ? prev : current
+        );
+        return mostPlayed.name;
+    }
+
+    getGameIcon(game) {
+        // Steam game icon URLs or fallback
+        return game.img_icon_url 
+            ? `https://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_icon_url}.jpg`
+            : 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/default_icon.jpg';
+    }
+
+    getAchievementProgress() {
+        // Simulated achievement progress
+        return Math.floor(Math.random() * 40) + 60; // Random between 60-100%
+    }
+
+    startAutoUpdate() {
+        // Update every 5 minutes
+        this.updateInterval = setInterval(() => {
+            if (this.isDemo) {
+                // Update demo data slightly for realism
+                this.updateDemoData();
+                this.displayPlayerData();
+            } else {
+                this.loadSteamData();
+            }
+        }, 300000); // 5 minutes
+    }
+
+    updateDemoData() {
+        // Simulate small changes in demo data
+        const now = Date.now() / 1000;
+        this.demoData.games.games.forEach(game => {
+            if (Math.random() < 0.3) { // 30% chance to update playtime
+                game.playtime_forever += Math.floor(Math.random() * 5) + 1;
+            }
+        });
+    }
+
+    async loadSteamData() {
+        // This would contain real Steam API integration
+        // For now, we'll use the demo data
+        throw new Error('Real Steam API integration not implemented');
+    }
+
+    destroy() {
+        if (this.updateInterval) {
+            clearInterval(this.updateInterval);
+        }
+    }
+}
+
+// Initialize Steam Widget
+let steamWidget;
+
+function initializeSteamWidget() {
+    steamWidget = new SteamWidget();
+    steamWidget.initialize();
+}
+
+// Clean up when page is unloaded
+window.addEventListener('beforeunload', function() {
+    if (steamWidget) {
+        steamWidget.destroy();
+    }
+});
