@@ -612,9 +612,12 @@ class SteamWidget {
     constructor() {
         this.container = document.getElementById('steamStatus');
         this.playerData = null;
-        this.isDemo = true; // Set to false when using real Steam API
+        this.isDemo = true; // Will be set to false when Steam API is configured
         this.demoData = this.generateDemoData();
         this.updateInterval = null;
+        this.apiKey = localStorage.getItem('steam_api_key') || '';
+        this.steamId = localStorage.getItem('steam_id') || '';
+        this.baseUrl = window.location.origin; // Use same origin for proxy
     }
 
     generateDemoData() {
@@ -693,16 +696,16 @@ class SteamWidget {
 
     async initialize() {
         try {
-            this.showLoading();
-            
-            if (this.isDemo) {
-                // Simulate API delay
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                this.playerData = this.demoData;
-                this.displayPlayerData();
-            } else {
-                // Real Steam API integration would go here
+            // Check if we have Steam API configuration
+            if (this.apiKey && this.steamId) {
+                this.isDemo = false;
+                await this.configureSteamAPI(this.apiKey);
+                this.showLoading();
                 await this.loadSteamData();
+            } else {
+                this.isDemo = true;
+                this.showConfiguration();
+                return;
             }
             
             // Set up automatic updates
@@ -731,8 +734,107 @@ class SteamWidget {
                 <button class="steam-connect-btn" onclick="steamWidget.initialize()">
                     Retry Connection
                 </button>
+                <button class="steam-connect-btn" onclick="steamWidget.showConfiguration()" style="margin-top: 10px;">
+                    Reconfigure Steam API
+                </button>
             </div>
         `;
+    }
+
+    showConfiguration() {
+        this.container.innerHTML = `
+            <div class="steam-config">
+                <h4 style="color: #66c0f4; margin-bottom: 15px; border: none;">Configure Steam API</h4>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; color: #c7d5e0; font-size: 0.85em; margin-bottom: 5px;">Steam API Key:</label>
+                    <input type="password" id="steamApiKey" placeholder="Enter your Steam API key" 
+                           style="width: 100%; padding: 8px; border: 1px solid #66c0f4; border-radius: 4px; background: #1b2838; color: #c7d5e0; font-size: 0.85em;" 
+                           value="${this.apiKey}">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; color: #c7d5e0; font-size: 0.85em; margin-bottom: 5px;">Steam ID:</label>
+                    <input type="text" id="steamId" placeholder="Enter your Steam ID" 
+                           style="width: 100%; padding: 8px; border: 1px solid #66c0f4; border-radius: 4px; background: #1b2838; color: #c7d5e0; font-size: 0.85em;" 
+                           value="${this.steamId}">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <button class="steam-connect-btn" onclick="steamWidget.saveConfiguration()">
+                        Save & Connect
+                    </button>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <button class="steam-connect-btn" onclick="steamWidget.useDemo()" style="background: #2a475e;">
+                        Use Demo Mode
+                    </button>
+                </div>
+                <div style="font-size: 0.8em; color: #898989; line-height: 1.4;">
+                    <p><strong>Need help?</strong></p>
+                    <p>• Get API Key: <a href="https://steamcommunity.com/dev/apikey" target="_blank" style="color: #66c0f4;">steamcommunity.com/dev/apikey</a></p>
+                    <p>• Find Steam ID: <a href="https://steamidfinder.com/" target="_blank" style="color: #66c0f4;">steamidfinder.com</a></p>
+                </div>
+            </div>
+        `;
+    }
+
+    async saveConfiguration() {
+        const apiKey = document.getElementById('steamApiKey').value.trim();
+        const steamId = document.getElementById('steamId').value.trim();
+
+        if (!apiKey || !steamId) {
+            alert('Please enter both Steam API Key and Steam ID');
+            return;
+        }
+
+        // Save to localStorage
+        localStorage.setItem('steam_api_key', apiKey);
+        localStorage.setItem('steam_id', steamId);
+        
+        this.apiKey = apiKey;
+        this.steamId = steamId;
+        this.isDemo = false;
+
+        try {
+            this.showLoading();
+            await this.configureSteamAPI(apiKey);
+            await this.loadSteamData();
+            this.startAutoUpdate();
+        } catch (error) {
+            console.error('Configuration error:', error);
+            this.showError('Failed to configure Steam API. Please check your API key and Steam ID.');
+        }
+    }
+
+    async useDemo() {
+        this.isDemo = true;
+        this.showLoading();
+        
+        // Simulate API delay
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        this.playerData = this.demoData;
+        this.displayPlayerData();
+        this.startAutoUpdate();
+    }
+
+    async configureSteamAPI(apiKey) {
+        try {
+            const response = await fetch(`${this.baseUrl}/api/steam/config`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ api_key: apiKey })
+            });
+
+            const result = await response.json();
+            if (!response.ok || result.error) {
+                throw new Error(result.error || 'Failed to configure Steam API');
+            }
+            
+            return result;
+        } catch (error) {
+            console.error('Steam API configuration error:', error);
+            throw error;
+        }
     }
 
     displayPlayerData() {
@@ -741,9 +843,14 @@ class SteamWidget {
             return;
         }
 
-        const { player, games } = this.playerData;
-        const totalPlaytime = games.games.reduce((total, game) => total + game.playtime_forever, 0);
-        const recentGames = games.games.slice(0, 3);
+        const { player, games, recent } = this.playerData;
+        const gamesList = games.games || [];
+        const totalPlaytime = gamesList.reduce((total, game) => total + (game.playtime_forever || 0), 0);
+        
+        // Use recent games if available, otherwise fall back to first few owned games
+        const recentGames = (recent && recent.games && recent.games.length > 0) 
+            ? recent.games.slice(0, 3) 
+            : gamesList.slice(0, 3);
 
         this.container.innerHTML = `
             <div class="steam-player-info">
@@ -767,7 +874,7 @@ class SteamWidget {
                 </div>
                 <div class="steam-stat-item">
                     <span class="steam-stat-label">Most Played</span>
-                    <span class="steam-stat-value">${this.getMostPlayedGame(games.games)}</span>
+                    <span class="steam-stat-value">${this.getMostPlayedGame(gamesList)}</span>
                 </div>
             </div>
 
@@ -855,13 +962,18 @@ class SteamWidget {
 
     startAutoUpdate() {
         // Update every 5 minutes
-        this.updateInterval = setInterval(() => {
-            if (this.isDemo) {
-                // Update demo data slightly for realism
-                this.updateDemoData();
-                this.displayPlayerData();
-            } else {
-                this.loadSteamData();
+        this.updateInterval = setInterval(async () => {
+            try {
+                if (this.isDemo) {
+                    // Update demo data slightly for realism
+                    this.updateDemoData();
+                    this.displayPlayerData();
+                } else {
+                    await this.loadSteamData();
+                }
+            } catch (error) {
+                console.error('Auto-update failed:', error);
+                // Don't show error for auto-updates, just log it
             }
         }, 300000); // 5 minutes
     }
@@ -877,9 +989,56 @@ class SteamWidget {
     }
 
     async loadSteamData() {
-        // This would contain real Steam API integration
-        // For now, we'll use the demo data
-        throw new Error('Real Steam API integration not implemented');
+        if (this.isDemo) {
+            // Use demo data
+            this.playerData = this.demoData;
+            this.displayPlayerData();
+            return;
+        }
+
+        if (!this.steamId) {
+            throw new Error('Steam ID not configured');
+        }
+
+        try {
+            // Fetch player profile
+            const playerResponse = await fetch(`${this.baseUrl}/api/steam/player?steamid=${this.steamId}`);
+            const playerData = await playerResponse.json();
+            
+            if (playerData.error) {
+                throw new Error(playerData.error);
+            }
+
+            // Fetch owned games
+            const gamesResponse = await fetch(`${this.baseUrl}/api/steam/games?steamid=${this.steamId}`);
+            const gamesData = await gamesResponse.json();
+            
+            if (gamesData.error) {
+                throw new Error(gamesData.error);
+            }
+
+            // Fetch recent games
+            const recentResponse = await fetch(`${this.baseUrl}/api/steam/recent?steamid=${this.steamId}&count=5`);
+            const recentData = await recentResponse.json();
+            
+            if (recentData.error) {
+                console.warn('Failed to load recent games:', recentData.error);
+                // Don't throw error for recent games, just use empty data
+            }
+
+            // Structure the data similar to demo format
+            this.playerData = {
+                player: playerData.response?.players?.[0] || {},
+                games: gamesData.response || { game_count: 0, games: [] },
+                recent: recentData.response || { games: [] }
+            };
+
+            this.displayPlayerData();
+
+        } catch (error) {
+            console.error('Failed to load Steam data:', error);
+            throw error;
+        }
     }
 
     destroy() {

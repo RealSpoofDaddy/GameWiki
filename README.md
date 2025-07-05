@@ -27,14 +27,21 @@ The project includes a Steam Status Bar widget that displays:
 - **Achievement Progress**: Visual progress bar for achievements
 - **Interactive Elements**: Click on games to launch them in Steam
 
-### Demo Mode
+### Real Steam API Integration
 
-The Steam widget currently runs in demo mode with sample data. To enable real Steam API integration:
+The Steam widget now supports real Steam API integration! You can use either demo mode or connect your actual Steam account.
 
-1. Get a Steam Web API key from https://steamcommunity.com/dev/apikey
-2. Find your Steam ID using https://steamidfinder.com/
-3. Set up a backend proxy to handle Steam API requests (due to CORS restrictions)
-4. Update the `isDemo` flag in the SteamWidget class to `false`
+#### Quick Setup (Real Steam Data):
+
+1. **Get Steam API Key**: Visit https://steamcommunity.com/dev/apikey
+2. **Find Your Steam ID**: Use https://steamidfinder.com/
+3. **Launch with API Support**: Run `python3 launch.py` (now includes built-in Steam API proxy)
+4. **Configure**: Enter your API key and Steam ID in the widget settings
+5. **Enjoy**: Real-time Steam data with live updates!
+
+#### Demo Mode:
+
+For testing without Steam API setup, the widget provides a demo mode with realistic sample data.
 
 ## File Structure
 
@@ -55,9 +62,36 @@ gamepedia/
 
 ## Setup
 
+### Option 1: With Real Steam API (Recommended)
+1. **Install dependencies**: `sudo apt install python3-requests` (or equivalent)
+2. **Run the server**: `python3 launch.py`
+3. **Browser opens automatically** with Steam API support
+4. **Configure Steam**: Enter your API key and Steam ID in the widget
+
+### Option 2: Demo Mode Only
 1. Clone the repository
 2. Open `gamepedia/index.html` in a web browser
-3. The Steam widget will automatically initialize with demo data
+3. The Steam widget will show demo data
+
+## Troubleshooting Steam API
+
+### Testing Your Steam API Configuration
+```bash
+# Test your Steam API credentials first
+python3 test_steam_integration.py YOUR_API_KEY YOUR_STEAM_ID
+```
+
+### Common Issues
+- **"Steam API key not configured"**: Make sure you entered the API key correctly
+- **"Steam ID required"**: Verify your Steam ID is a 17-digit number
+- **"No player data found"**: Check that your Steam profile is set to public
+- **"Permission denied"**: Your API key might be invalid or expired
+
+### Steam Profile Privacy
+Your Steam profile must be public for the API to work:
+1. Go to your Steam profile → Edit Profile → Privacy Settings
+2. Set "Game details" to "Public"
+3. Set "Game details" to "Public" (yes, this is important!)
 
 ## Steam API Integration
 

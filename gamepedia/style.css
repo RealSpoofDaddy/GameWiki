@@ -629,6 +629,38 @@ a:active {
     transform: translateY(-1px);
 }
 
+.steam-config {
+    padding: 15px;
+}
+
+.steam-config input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #66c0f4;
+    border-radius: 4px;
+    background: #1b2838;
+    color: #c7d5e0;
+    font-size: 0.85em;
+    box-sizing: border-box;
+}
+
+.steam-config input:focus {
+    outline: none;
+    border-color: #57cbde;
+    box-shadow: 0 0 5px rgba(102, 192, 244, 0.3);
+}
+
+.steam-config label {
+    display: block;
+    color: #c7d5e0;
+    font-size: 0.85em;
+    margin-bottom: 5px;
+}
+
+.steam-config button {
+    margin-top: 5px;
+}
+
 /* Search Results */
 .search-results {
     margin-bottom: 30px;
