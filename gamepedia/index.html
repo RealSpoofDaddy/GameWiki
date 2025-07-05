@@ -3,25 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GamePedia - The Free Gaming Encyclopedia</title>
-    <meta name="description" content="A comprehensive encyclopedia of video games, featuring detailed information about games, developers, platforms, and gaming history.">
-    <meta property="og:title" content="GamePedia - The Free Gaming Encyclopedia">
-    <meta property="og:description" content="Comprehensive video game information and history">
+    <title>GamePedia - Ultimate Gaming Hub</title>
+    <meta name="description" content="The ultimate gaming hub featuring Steam integration, game statistics, modern UI, and comprehensive gaming information.">
+    <meta property="og:title" content="GamePedia - Ultimate Gaming Hub">
+    <meta property="og:description" content="Ultimate gaming platform with Steam integration and modern design">
     <meta property="og:type" content="website">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="css/game-page.css">
+    <meta name="keywords" content="gaming, steam, games, statistics, gaming hub, game library, achievements">
+    <meta name="theme-color" content="#1e90ff">
+    
+    <!-- Modern Gaming Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Linux+Libertine:wght@400;700&family=Liberation+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/game-page.css">
+    
+    <!-- PWA Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="GamePedia">
+    
+    <!-- Performance Hints -->
+    <link rel="dns-prefetch" href="//cdn.cloudflare.steamstatic.com">
+    <link rel="dns-prefetch" href="//steamcommunity.com">
+    <link rel="preload" href="style.css" as="style">
+    <link rel="preload" href="script.js" as="script">
 </head>
 <body>
     <header class="site-header">
         <div class="container">
             <div class="header-content">
                 <h1 class="site-title">
-                    <a href="index.html">GamePedia</a>
+                    <a href="index.html">🎮 GamePedia</a>
                 </h1>
-                <p class="site-tagline">The Free Gaming Encyclopedia</p>
+                <p class="site-tagline">Ultimate Gaming Hub with Steam Integration</p>
             </div>
             <nav class="main-nav">
                 <ul>
@@ -190,9 +207,11 @@
 
     <footer class="site-footer">
         <div class="container">
-            <p>&copy; 2024 GamePedia. A free gaming encyclopedia.</p>
+            <p>&copy; 2024 GamePedia. Ultimate Gaming Hub with Modern Design.</p>
             <nav class="footer-nav">
                 <a href="#about">About</a>
+                <a href="#steam-integration">Steam Integration</a>
+                <a href="#features">Features</a>
                 <a href="#privacy">Privacy</a>
                 <a href="#contact">Contact</a>
             </nav>
