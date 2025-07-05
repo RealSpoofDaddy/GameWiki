@@ -1171,3 +1171,596 @@ a:active {
 .mt-1 { margin-top: 0.5em; }
 .mt-2 { margin-top: 1em; }
 .mt-3 { margin-top: 1.5em; }
+
+/* Enhanced Steam Widget Styles - Advanced Gaming Features */
+
+/* Comprehensive Layout */
+.steam-comprehensive-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Enhanced Stats Grid */
+.steam-enhanced-stats {
+    margin-bottom: 20px;
+}
+
+.steam-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.steam-stat-card {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.steam-stat-card:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.steam-stat-icon {
+    font-size: 1.8em;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.steam-stat-content {
+    flex: 1;
+}
+
+.steam-stat-value {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #66c0f4;
+    margin-bottom: 2px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.steam-stat-label {
+    font-size: 0.75em;
+    color: #c7d5e0;
+    font-weight: 500;
+}
+
+/* Enhanced Game Cards */
+.steam-recent-games-enhanced {
+    margin-bottom: 20px;
+}
+
+.steam-games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.steam-enhanced-game-card {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.steam-enhanced-game-card:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+.steam-game-header {
+    position: relative;
+    height: 120px;
+    overflow: hidden;
+}
+
+.steam-game-header-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.steam-enhanced-game-card:hover .steam-game-header-img {
+    transform: scale(1.05);
+}
+
+.steam-game-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    padding: 15px;
+    color: white;
+}
+
+.steam-game-name {
+    font-size: 1em;
+    font-weight: 600;
+    margin: 0 0 5px 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.steam-game-meta {
+    display: flex;
+    gap: 10px;
+    font-size: 0.8em;
+}
+
+.steam-playtime {
+    background: rgba(102, 192, 244, 0.8);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.steam-recent-time {
+    background: rgba(87, 203, 222, 0.8);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.steam-game-details {
+    padding: 15px;
+}
+
+.steam-game-desc {
+    font-size: 0.8em;
+    color: #c7d5e0;
+    margin: 0 0 10px 0;
+    line-height: 1.4;
+}
+
+.steam-game-info-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+
+.steam-genre-tag {
+    background: rgba(102, 192, 244, 0.2);
+    color: #66c0f4;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.7em;
+    font-weight: 500;
+    border: 1px solid rgba(102, 192, 244, 0.3);
+}
+
+.steam-score-badge {
+    background: linear-gradient(135deg, #4caf50, #45a049);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7em;
+    font-weight: 600;
+}
+
+.steam-price-tag {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7em;
+    font-weight: 600;
+}
+
+.steam-price-tag.discounted {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+}
+
+.steam-price-tag s {
+    opacity: 0.7;
+    margin-left: 4px;
+}
+
+.steam-achievement-mini {
+    font-size: 0.75em;
+    color: #ffa500;
+    font-weight: 500;
+}
+
+.steam-view-all-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: #66c0f4;
+    border: 1px solid rgba(102, 192, 244, 0.3);
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85em;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.steam-view-all-btn:hover {
+    background: rgba(102, 192, 244, 0.2);
+    border-color: #66c0f4;
+    transform: translateY(-1px);
+}
+
+/* Achievement Progress */
+.steam-achievements-section {
+    margin-bottom: 20px;
+}
+
+.steam-overall-achievement {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.steam-achievement-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.steam-achievement-total {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.9em;
+}
+
+.steam-achievement-overall {
+    color: #66c0f4;
+    font-weight: 700;
+    font-size: 0.9em;
+}
+
+.steam-achievement-bar-main {
+    width: 100%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+}
+
+.steam-achievement-fill-main {
+    height: 100%;
+    background: linear-gradient(90deg, #66c0f4 0%, #57cbde 50%, #4fc3f7 100%);
+    border-radius: 6px;
+    transition: width 1s ease;
+    position: relative;
+}
+
+.steam-achievement-fill-main::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: achievementShine 3s ease-in-out infinite;
+}
+
+.steam-achievement-item {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.steam-achievement-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.steam-achievement-count {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.85em;
+}
+
+.steam-achievement-percentage {
+    color: #66c0f4;
+    font-weight: 700;
+    font-size: 0.85em;
+}
+
+/* Recommendations */
+.steam-recommendations-section {
+    margin-bottom: 20px;
+}
+
+.steam-recommendations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.steam-recommendation-card {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 15px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.steam-recommendation-card:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.steam-rec-content {
+    margin-bottom: 15px;
+}
+
+.steam-rec-title {
+    color: #ffffff;
+    font-size: 1em;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.steam-rec-reason {
+    color: #c7d5e0;
+    font-size: 0.8em;
+    margin: 0 0 10px 0;
+    line-height: 1.4;
+}
+
+.steam-rec-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.steam-rec-score {
+    background: linear-gradient(135deg, #4caf50, #45a049);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75em;
+    font-weight: 600;
+}
+
+.steam-rec-price {
+    color: #66c0f4;
+    font-weight: 700;
+    font-size: 0.9em;
+}
+
+.steam-rec-btn {
+    background: linear-gradient(135deg, #66c0f4, #57cbde);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8em;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.steam-rec-btn:hover {
+    background: linear-gradient(135deg, #57cbde, #66c0f4);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Game Details Modal */
+.steam-game-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+}
+
+.steam-modal-content {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    border-radius: 16px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.steam-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.steam-modal-header h3 {
+    color: #ffffff;
+    margin: 0;
+    font-size: 1.3em;
+    font-weight: 600;
+}
+
+.steam-modal-close {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.steam-modal-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.steam-modal-body {
+    padding: 20px;
+    color: #c7d5e0;
+    overflow-y: auto;
+}
+
+/* Responsive Enhancements */
+@media screen and (max-width: 768px) {
+    .steam-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .steam-stat-card {
+        padding: 12px;
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+    }
+    
+    .steam-games-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .steam-recommendations-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .steam-achievement-summary {
+        flex-direction: column;
+        gap: 5px;
+        text-align: center;
+    }
+    
+    .steam-game-info-row {
+        justify-content: center;
+    }
+    
+    .steam-modal-content {
+        width: 95%;
+        margin: 10px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .steam-stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .steam-stat-card {
+        flex-direction: row;
+        text-align: left;
+    }
+    
+    .steam-game-header {
+        height: 100px;
+    }
+    
+    .steam-comprehensive-layout {
+        gap: 15px;
+    }
+}
+
+/* Animation Keyframes */
+@keyframes steamGlow {
+    0%, 100% { 
+        background-position: 0% 50%; 
+        opacity: 1;
+    }
+    50% { 
+        background-position: 100% 50%; 
+        opacity: 0.8;
+    }
+}
+
+@keyframes achievementShine {
+    0% { 
+        transform: translateX(-100%); 
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% { 
+        transform: translateX(100%); 
+        opacity: 0;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        opacity: 1; 
+        transform: scale(1);
+    }
+    50% { 
+        opacity: 0.7; 
+        transform: scale(1.05);
+    }
+}
+
+/* Enhanced Loading Animation */
+.steam-loading .loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    border-top: 4px solid #66c0f4;
+    border-radius: 50%;
+    animation: spin 1.2s linear infinite;
+    margin: 0 auto 20px;
+}
+
+/* Enhanced Tooltips */
+.steam-tooltip {
+    position: relative;
+    cursor: help;
+}
+
+.steam-tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.8em;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.steam-tooltip:hover::after {
+    opacity: 1;
+    visibility: visible;
+    bottom: calc(100% + 5px);
+}

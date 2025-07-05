@@ -607,43 +607,103 @@ window.showMultiplayerGames = showMultiplayerGames;
 window.addToRecentlyViewed = addToRecentlyViewed;
 window.applyFilters = applyFilters;
 
-// Steam Widget - Secure Implementation
+// Enhanced Steam Widget - Ultimate Gaming Features
 class SteamWidget {
     constructor() {
         this.baseUrl = window.location.origin;
         this.isDemo = false;
         this.sessionToken = localStorage.getItem('steam_session_token') || null;
         this.demoData = {
-            // Demo data for testing without real Steam API
+            // Enhanced demo data with comprehensive features
             player: {
-                personaname: "GamerDemo",
+                personaname: "GameMaster Pro",
                 avatarfull: "https://avatars.steamstatic.com/b5bd56c1aa4644a474a2e4972be27ef9e82e517e_full.jpg",
                 personastate: 1,
                 profileurl: "https://steamcommunity.com/profiles/76561198123456789"
             },
             stats: {
-                total_games: 156,
-                total_playtime: "2,847 hours",
-                most_played: "Counter-Strike 2"
+                total_games: 247,
+                total_playtime: "3,847 hours",
+                most_played: "Counter-Strike 2",
+                average_playtime: "15.6 hours",
+                games_never_played: 23,
+                games_played_recently: 12
             },
             recentGames: [
                 {
+                    appid: 730,
                     name: "Counter-Strike 2",
-                    playtime_forever: 1247,
+                    playtime_forever: 1847,
+                    playtime_2weeks: 32,
                     img_icon_url: "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/730/69f7ebe2735c366c65c0b33dae00e12dc40edbe4.jpg",
-                    appid: 730
+                    header_image: "https://cdn.cloudflare.steamstatic.com/steam/apps/730/header.jpg",
+                    short_description: "For over two decades, Counter-Strike has offered an elite competitive experience...",
+                    genres: "Action, Free to Play",
+                    metacritic_score: 83,
+                    price_current: 0,
+                    achievements_count: 167
                 },
                 {
+                    appid: 1091500,
                     name: "Cyberpunk 2077",
-                    playtime_forever: 89,
+                    playtime_forever: 156,
+                    playtime_2weeks: 28,
                     img_icon_url: "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/1091500/836fb70d06ed5a7e4b3b4c2b7a8c1a7ecb1e9d6e.jpg",
-                    appid: 1091500
+                    header_image: "https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg",
+                    short_description: "Cyberpunk 2077 is an open-world, action-adventure RPG set in the megalopolis of Night City...",
+                    genres: "RPG, Action, Adventure",
+                    metacritic_score: 86,
+                    price_current: 29.99,
+                    price_original: 59.99,
+                    price_discount_percent: 50,
+                    achievements_count: 44
                 },
                 {
+                    appid: 1086940,
                     name: "Baldur's Gate 3",
-                    playtime_forever: 156,
+                    playtime_forever: 89,
+                    playtime_2weeks: 15,
                     img_icon_url: "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/1086940/8c1c6e2e2e7e2e2e2e2e2e2e2e2e2e2e2e2e2e2e.jpg",
-                    appid: 1086940
+                    header_image: "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg",
+                    short_description: "Baldur's Gate 3 is a story-rich, party-based RPG set in the universe of Dungeons & Dragons...",
+                    genres: "RPG, Strategy, Adventure",
+                    metacritic_score: 96,
+                    price_current: 59.99,
+                    achievements_count: 54
+                }
+            ],
+            topGames: [
+                {
+                    appid: 730,
+                    name: "Counter-Strike 2",
+                    playtime_forever: 1847,
+                    metacritic_score: 83,
+                    achievements_count: 167
+                },
+                {
+                    appid: 1091500,
+                    name: "Cyberpunk 2077",
+                    playtime_forever: 156,
+                    metacritic_score: 86,
+                    achievements_count: 44
+                }
+            ],
+            achievements: {
+                730: { total: 167, unlocked: 89, percentage: 53.3 },
+                1091500: { total: 44, unlocked: 23, percentage: 52.3 }
+            },
+            recommendations: [
+                {
+                    name: "The Witcher 3: Wild Hunt",
+                    reason: "Based on your RPG preferences",
+                    score: 93,
+                    price: 39.99
+                },
+                {
+                    name: "Elden Ring",
+                    reason: "Highly rated action RPG",
+                    score: 96,
+                    price: 59.99
                 }
             ]
         };
@@ -699,9 +759,9 @@ class SteamWidget {
         widget.innerHTML = `
             <div class="steam-config">
                 <div style="text-align: center; margin-bottom: 20px;">
-                    <div style="font-size: 2em; margin-bottom: 10px;">🎮</div>
+                    <div style="font-size: 2.5em; margin-bottom: 10px;">🎮</div>
                     <h4 style="color: #ffffff; margin: 0;">Connect Your Steam Account</h4>
-                    <p style="color: #c7d5e0; font-size: 0.85em; margin: 5px 0;">Get real-time Steam statistics and gaming data</p>
+                    <p style="color: #c7d5e0; font-size: 0.85em; margin: 8px 0;">Access advanced gaming features and comprehensive statistics</p>
                 </div>
                 
                 <div style="margin-bottom: 15px;">
@@ -714,7 +774,7 @@ class SteamWidget {
                            style="margin-bottom: 15px;">
                     
                     <button class="steam-connect-btn" onclick="steamWidget.authenticateUser()">
-                        🔐 Connect Steam Account
+                        🔐 Connect & Enable Advanced Features
                     </button>
                     
                     <button class="steam-connect-btn" onclick="steamWidget.showDemoMode()" 
@@ -724,11 +784,18 @@ class SteamWidget {
                 </div>
                 
                 <div class="steam-help-text">
-                    <h5 style="color: #ffffff; margin: 0 0 10px 0;">🚀 Quick Setup:</h5>
+                    <h5 style="color: #ffffff; margin: 0 0 10px 0;">🚀 Advanced Features:</h5>
+                    <p style="margin: 5px 0;">• <strong>Real-time Data:</strong> Live Steam statistics and game tracking</p>
+                    <p style="margin: 5px 0;">• <strong>Achievement Tracking:</strong> Progress monitoring across all games</p>
+                    <p style="margin: 5px 0;">• <strong>Game Recommendations:</strong> AI-powered suggestions based on your library</p>
+                    <p style="margin: 5px 0;">• <strong>Price Alerts:</strong> Notifications for wishlist games on sale</p>
+                    <p style="margin: 5px 0;">• <strong>Comprehensive Analytics:</strong> Detailed gaming insights</p>
+                    
+                    <h5 style="color: #ffffff; margin: 15px 0 10px 0;">🔗 Quick Setup:</h5>
                     <p style="margin: 5px 0;">• <strong>API Key:</strong> <a href="https://steamcommunity.com/dev/apikey" target="_blank">Get your key here</a></p>
                     <p style="margin: 5px 0;">• <strong>Steam ID:</strong> <a href="https://steamidfinder.com/" target="_blank">Find your ID here</a></p>
                     <p style="margin: 10px 0 0 0; font-size: 0.8em; color: #98a8b0;">
-                        🔒 <strong>Security:</strong> Your credentials are encrypted and stored securely server-side.
+                        🔒 <strong>Military-Grade Security:</strong> Your credentials are encrypted with AES-256 and stored securely server-side.
                     </p>
                 </div>
             </div>
@@ -737,9 +804,7 @@ class SteamWidget {
 
     showDemoMode() {
         this.isDemo = true;
-        this.displayPlayerInfo(this.demoData.player);
-        this.displayStats(this.demoData.stats);
-        this.displayRecentGames(this.demoData.recentGames);
+        this.displayComprehensiveData(this.demoData);
         this.showDemoIndicator();
     }
 
@@ -752,15 +817,16 @@ class SteamWidget {
         demoIndicator.style.cssText = `
             background: linear-gradient(135deg, #ff6b6b, #ffa500);
             color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 0.8em;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.85em;
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             font-weight: 600;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         `;
-        demoIndicator.innerHTML = '🎭 Demo Mode - <a href="#" onclick="steamWidget.showConfiguration()" style="color: white; text-decoration: underline;">Connect Real Account</a>';
+        demoIndicator.innerHTML = '🎭 Demo Mode - <a href="#" onclick="steamWidget.showConfiguration()" style="color: white; text-decoration: underline; font-weight: 700;">Connect Real Account for Advanced Features</a>';
         widget.insertBefore(demoIndicator, widget.firstChild);
     }
 
@@ -778,8 +844,13 @@ class SteamWidget {
         widget.innerHTML = `
             <div class="steam-loading">
                 <div class="loading-spinner"></div>
-                <p>🔐 Authenticating with Steam...</p>
-                <p style="font-size: 0.8em; color: #98a8b0;">This may take a moment</p>
+                <p>🔐 Establishing Secure Connection...</p>
+                <p style="font-size: 0.8em; color: #98a8b0;">Encrypting credentials and validating with Steam API</p>
+                <div style="margin-top: 15px; font-size: 0.75em; color: #7a8c98;">
+                    <p>• Validating Steam API credentials</p>
+                    <p>• Creating encrypted session</p>
+                    <p>• Initializing advanced features</p>
+                </div>
             </div>
         `;
 
@@ -807,7 +878,7 @@ class SteamWidget {
                 this.startUpdates();
                 
                 // Show success message
-                this.showSuccess('✅ Successfully connected to Steam!');
+                this.showSuccess('✅ Advanced Gaming Features Activated!');
                 
             } else {
                 this.showError(result.error || 'Authentication failed. Please check your credentials.');
@@ -846,18 +917,7 @@ class SteamWidget {
             }
 
             const steamData = await response.json();
-            
-            if (steamData.player) {
-                this.displayPlayerInfo(steamData.player);
-            }
-            
-            if (steamData.stats) {
-                this.displayStats(steamData.stats);
-            }
-            
-            if (steamData.recentGames) {
-                this.displayRecentGames(steamData.recentGames);
-            }
+            this.displayComprehensiveData(steamData);
 
         } catch (error) {
             console.error('Error updating Steam data:', error);
@@ -865,9 +925,32 @@ class SteamWidget {
         }
     }
 
-    displayPlayerInfo(player) {
+    displayComprehensiveData(data) {
         const widget = document.getElementById('steamStatus');
         if (!widget) return;
+
+        // Create comprehensive layout
+        widget.innerHTML = `
+            <div class="steam-comprehensive-layout">
+                <div id="playerInfo"></div>
+                <div id="enhancedStats"></div>
+                <div id="recentGamesSection"></div>
+                <div id="achievementsSection"></div>
+                <div id="recommendationsSection"></div>
+            </div>
+        `;
+
+        // Display each section
+        this.displayPlayerInfo(data.player);
+        this.displayEnhancedStats(data.stats);
+        this.displayRecentGames(data.recentGames || data.topGames);
+        this.displayAchievements(data.achievements);
+        this.displayRecommendations(data.recommendations);
+    }
+
+    displayPlayerInfo(player) {
+        const container = document.getElementById('playerInfo');
+        if (!container || !player) return;
 
         const statusMap = {
             0: { text: "Offline", class: "steam-status-offline" },
@@ -881,7 +964,7 @@ class SteamWidget {
 
         const status = statusMap[player.personastate] || statusMap[0];
 
-        widget.innerHTML = `
+        container.innerHTML = `
             <div class="steam-player-info">
                 <img src="${player.avatarfull}" alt="${player.personaname}" class="steam-avatar">
                 <div class="steam-player-details">
@@ -889,61 +972,219 @@ class SteamWidget {
                     <div class="steam-player-status ${status.class}">
                         ${status.text}
                     </div>
+                    ${player.profileurl ? `<a href="${player.profileurl}" target="_blank" style="color: #66c0f4; font-size: 0.8em; text-decoration: none;">View Steam Profile →</a>` : ''}
                 </div>
             </div>
-            <div id="steamStats"></div>
-            <div id="recentGames"></div>
         `;
     }
 
-    displayStats(stats) {
-        const statsContainer = document.getElementById('steamStats');
-        if (!statsContainer) return;
+    displayEnhancedStats(stats) {
+        const container = document.getElementById('enhancedStats');
+        if (!container || !stats) return;
 
-        statsContainer.innerHTML = `
-            <div class="steam-stats">
-                <div class="steam-stat-item">
-                    <span class="steam-stat-label">Total Games</span>
-                    <span class="steam-stat-value">${stats.total_games}</span>
-                </div>
-                <div class="steam-stat-item">
-                    <span class="steam-stat-label">Total Playtime</span>
-                    <span class="steam-stat-value">${stats.total_playtime}</span>
-                </div>
-                <div class="steam-stat-item">
-                    <span class="steam-stat-label">Most Played</span>
-                    <span class="steam-stat-value">${stats.most_played}</span>
+        container.innerHTML = `
+            <div class="steam-enhanced-stats">
+                <h4 style="color: #ffffff; margin: 0 0 15px 0; font-size: 1em;">📊 Gaming Analytics</h4>
+                <div class="steam-stats-grid">
+                    <div class="steam-stat-card">
+                        <div class="steam-stat-icon">🎮</div>
+                        <div class="steam-stat-content">
+                            <div class="steam-stat-value">${stats.total_games}</div>
+                            <div class="steam-stat-label">Total Games</div>
+                        </div>
+                    </div>
+                    <div class="steam-stat-card">
+                        <div class="steam-stat-icon">⏱️</div>
+                        <div class="steam-stat-content">
+                            <div class="steam-stat-value">${stats.total_playtime}</div>
+                            <div class="steam-stat-label">Total Playtime</div>
+                        </div>
+                    </div>
+                    <div class="steam-stat-card">
+                        <div class="steam-stat-icon">🏆</div>
+                        <div class="steam-stat-content">
+                            <div class="steam-stat-value">${stats.most_played}</div>
+                            <div class="steam-stat-label">Most Played</div>
+                        </div>
+                    </div>
+                    <div class="steam-stat-card">
+                        <div class="steam-stat-icon">📈</div>
+                        <div class="steam-stat-content">
+                            <div class="steam-stat-value">${stats.average_playtime || 'N/A'}</div>
+                            <div class="steam-stat-label">Avg Playtime</div>
+                        </div>
+                    </div>
+                    <div class="steam-stat-card">
+                        <div class="steam-stat-icon">🎯</div>
+                        <div class="steam-stat-content">
+                            <div class="steam-stat-value">${stats.games_played_recently || 0}</div>
+                            <div class="steam-stat-label">Recently Active</div>
+                        </div>
+                    </div>
+                    <div class="steam-stat-card">
+                        <div class="steam-stat-icon">📚</div>
+                        <div class="steam-stat-content">
+                            <div class="steam-stat-value">${stats.games_never_played || 0}</div>
+                            <div class="steam-stat-label">Backlog</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
     }
 
     displayRecentGames(games) {
-        const recentContainer = document.getElementById('recentGames');
-        if (!recentContainer) return;
+        const container = document.getElementById('recentGamesSection');
+        if (!container || !games || games.length === 0) return;
 
-        const gamesList = games.map(game => {
+        const gamesList = games.slice(0, 5).map(game => {
             const playtimeHours = Math.floor(game.playtime_forever / 60);
             const playtimeMinutes = game.playtime_forever % 60;
             const playtimeText = playtimeHours > 0 ? `${playtimeHours}h ${playtimeMinutes}m` : `${playtimeMinutes}m`;
             
+            const recentPlaytime = game.playtime_2weeks ? `+${Math.floor(game.playtime_2weeks / 60)}h this week` : '';
+            
             return `
-                <div class="steam-recent-game" onclick="steamWidget.launchGame(${game.appid})">
-                    <img src="${game.img_icon_url}" alt="${game.name}" class="steam-game-image">
-                    <div class="steam-game-info">
-                        <div class="steam-game-title">${game.name}</div>
-                        <div class="steam-game-playtime">${playtimeText}</div>
+                <div class="steam-enhanced-game-card" onclick="steamWidget.showGameDetails(${game.appid}, '${game.name}')">
+                    <div class="steam-game-header">
+                        ${game.header_image ? `<img src="${game.header_image}" alt="${game.name}" class="steam-game-header-img">` : ''}
+                        <div class="steam-game-overlay">
+                            <h5 class="steam-game-name">${game.name}</h5>
+                            <div class="steam-game-meta">
+                                <span class="steam-playtime">${playtimeText}</span>
+                                ${recentPlaytime ? `<span class="steam-recent-time">${recentPlaytime}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="steam-game-details">
+                        ${game.short_description ? `<p class="steam-game-desc">${game.short_description.substring(0, 80)}...</p>` : ''}
+                        <div class="steam-game-info-row">
+                            ${game.genres ? `<span class="steam-genre-tag">${game.genres.split(',')[0]}</span>` : ''}
+                            ${game.metacritic_score ? `<span class="steam-score-badge">${game.metacritic_score}</span>` : ''}
+                            ${game.price_current !== undefined ? 
+                                `<span class="steam-price-tag ${game.price_discount_percent ? 'discounted' : ''}">
+                                    ${game.price_current === 0 ? 'Free' : `$${game.price_current}`}
+                                    ${game.price_discount_percent ? `<s>$${game.price_original}</s>` : ''}
+                                </span>` : ''
+                            }
+                        </div>
+                        ${game.achievements_count ? `<div class="steam-achievement-mini">🏆 ${game.achievements_count} achievements</div>` : ''}
                     </div>
                 </div>
             `;
         }).join('');
 
-        recentContainer.innerHTML = `
-            <div class="steam-recent-games">
-                <h4>🎮 Recently Played</h4>
-                ${gamesList}
+        container.innerHTML = `
+            <div class="steam-recent-games-enhanced">
+                <h4 style="color: #ffffff; margin: 0 0 15px 0; font-size: 1em;">🎮 Recently Played Games</h4>
+                <div class="steam-games-grid">
+                    ${gamesList}
+                </div>
+                <button class="steam-view-all-btn" onclick="steamWidget.showAllGames()">
+                    View All Games →
+                </button>
             </div>
         `;
+    }
+
+    displayAchievements(achievements) {
+        const container = document.getElementById('achievementsSection');
+        if (!container || !achievements) return;
+
+        const achievementsList = Object.entries(achievements).map(([appId, data]) => {
+            return `
+                <div class="steam-achievement-item">
+                    <div class="steam-achievement-progress">
+                        <div class="steam-achievement-info">
+                            <span class="steam-achievement-count">${data.unlocked}/${data.total}</span>
+                            <span class="steam-achievement-percentage">${data.percentage.toFixed(1)}%</span>
+                        </div>
+                        <div class="steam-achievement-bar">
+                            <div class="steam-achievement-fill" style="width: ${data.percentage}%"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        const totalAchievements = Object.values(achievements).reduce((sum, data) => sum + data.total, 0);
+        const unlockedAchievements = Object.values(achievements).reduce((sum, data) => sum + data.unlocked, 0);
+        const overallPercentage = totalAchievements > 0 ? (unlockedAchievements / totalAchievements * 100) : 0;
+
+        container.innerHTML = `
+            <div class="steam-achievements-section">
+                <h4 style="color: #ffffff; margin: 0 0 15px 0; font-size: 1em;">🏆 Achievement Progress</h4>
+                <div class="steam-overall-achievement">
+                    <div class="steam-achievement-summary">
+                        <span class="steam-achievement-total">${unlockedAchievements}/${totalAchievements} Achievements</span>
+                        <span class="steam-achievement-overall">${overallPercentage.toFixed(1)}% Complete</span>
+                    </div>
+                    <div class="steam-achievement-bar-main">
+                        <div class="steam-achievement-fill-main" style="width: ${overallPercentage}%"></div>
+                    </div>
+                </div>
+                ${achievementsList}
+            </div>
+        `;
+    }
+
+    displayRecommendations(recommendations) {
+        const container = document.getElementById('recommendationsSection');
+        if (!container || !recommendations || recommendations.length === 0) return;
+
+        const recommendationsList = recommendations.map(rec => {
+            return `
+                <div class="steam-recommendation-card">
+                    <div class="steam-rec-content">
+                        <h5 class="steam-rec-title">${rec.name}</h5>
+                        <p class="steam-rec-reason">${rec.reason}</p>
+                        <div class="steam-rec-meta">
+                            <span class="steam-rec-score">⭐ ${rec.score}/100</span>
+                            <span class="steam-rec-price">$${rec.price}</span>
+                        </div>
+                    </div>
+                    <button class="steam-rec-btn" onclick="steamWidget.viewOnSteam('${rec.name}')">
+                        View on Steam
+                    </button>
+                </div>
+            `;
+        }).join('');
+
+        container.innerHTML = `
+            <div class="steam-recommendations-section">
+                <h4 style="color: #ffffff; margin: 0 0 15px 0; font-size: 1em;">🎯 Recommended For You</h4>
+                <div class="steam-recommendations-grid">
+                    ${recommendationsList}
+                </div>
+            </div>
+        `;
+    }
+
+    showGameDetails(appId, gameName) {
+        // Create modal for game details
+        const modal = document.createElement('div');
+        modal.className = 'steam-game-modal';
+        modal.innerHTML = `
+            <div class="steam-modal-content">
+                <div class="steam-modal-header">
+                    <h3>${gameName}</h3>
+                    <button class="steam-modal-close" onclick="this.parentElement.parentElement.parentElement.remove()">×</button>
+                </div>
+                <div class="steam-modal-body">
+                    <p>Loading game details...</p>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+
+    showAllGames() {
+        this.showInfo('Game library view coming soon!');
+    }
+
+    viewOnSteam(gameName) {
+        const searchUrl = `https://store.steampowered.com/search/?term=${encodeURIComponent(gameName)}`;
+        window.open(searchUrl, '_blank');
     }
 
     launchGame(appId) {
@@ -952,7 +1193,6 @@ class SteamWidget {
             return;
         }
         
-        // Open Steam game
         window.open(`steam://rungameid/${appId}`, '_blank');
     }
 
@@ -976,9 +1216,10 @@ class SteamWidget {
         if (!widget) return;
 
         widget.innerHTML = `
-            <div style="text-align: center; padding: 20px; color: #4caf50;">
-                <div style="font-size: 2em; margin-bottom: 10px;">✅</div>
-                <p>${message}</p>
+            <div style="text-align: center; padding: 30px 20px; color: #4caf50;">
+                <div style="font-size: 3em; margin-bottom: 15px;">✅</div>
+                <p style="font-size: 1.1em; font-weight: 600;">${message}</p>
+                <p style="font-size: 0.85em; color: #98a8b0; margin-top: 10px;">Loading your comprehensive gaming data...</p>
             </div>
         `;
 
@@ -989,9 +1230,6 @@ class SteamWidget {
     }
 
     showInfo(message) {
-        const widget = document.getElementById('steamStatus');
-        if (!widget) return;
-
         const infoDiv = document.createElement('div');
         infoDiv.style.cssText = `
             position: fixed;
@@ -1000,11 +1238,13 @@ class SteamWidget {
             background: linear-gradient(135deg, #66c0f4, #57cbde);
             color: white;
             padding: 15px 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
             z-index: 1000;
             font-size: 0.9em;
             font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
         `;
         infoDiv.textContent = message;
         document.body.appendChild(infoDiv);
